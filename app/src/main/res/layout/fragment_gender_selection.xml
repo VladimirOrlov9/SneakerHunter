@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="?attr/actionBarSize">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageButtonMale"
+            android:src="@drawable/boy"
+            android:scaleType="centerInside"
+            android:background="@drawable/roundcorner"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/male_search_image" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageButtonFemale"
+            android:scaleType="centerInside"
+            android:src="@drawable/girl"
+            android:background="@drawable/roundcorner"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/female_search_image"/>
+    </FrameLayout>
+</LinearLayout>
