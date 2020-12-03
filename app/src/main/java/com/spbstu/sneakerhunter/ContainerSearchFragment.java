@@ -22,6 +22,10 @@ public class ContainerSearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        GenderSelectionFragment nextFrag = new GenderSelectionFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.frame_container, nextFrag)
+                .commit();
 
         return inflater.inflate(R.layout.fragment_container_search, container, false);
     }

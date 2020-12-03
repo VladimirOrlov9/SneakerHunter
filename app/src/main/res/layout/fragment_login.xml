@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".LoginFragment">
+    android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,14 +14,14 @@
         android:layout_gravity="center"
         app:civ_border_width="2dp"
         app:civ_border_color="@color/colorPrimary"
-        android:layout_marginTop="20dp" />
+        android:paddingTop="20dp" />
 
     <com.google.android.gms.common.SignInButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="80dp"
+        android:paddingHorizontal="80dp"
         android:id="@+id/sign_in_button"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"/>
+        android:paddingTop="50dp"/>
 </LinearLayout>
 

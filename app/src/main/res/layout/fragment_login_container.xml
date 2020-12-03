@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment
+<androidx.fragment.app.FragmentContainerView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:name="com.spbstu.sneakerhunter.LoginFragment"
-    android:tag="first"
+    android:id="@+id/frame_login_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/frame_container"/>
+    android:paddingBottom="?attr/actionBarSize"/>

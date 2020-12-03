@@ -108,7 +108,7 @@ public class SearchFragment extends Fragment {
 
         ToggleButton sortToggleButton = (ToggleButton) view.findViewById(R.id.sort_toggle_button);
 
-        EditText editTextSearch = (EditText) view.findViewById(R.id.query_edit_text);
+        final EditText editTextSearch = (EditText) view.findViewById(R.id.query_edit_text);
 
         sortToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -118,19 +118,17 @@ public class SearchFragment extends Fragment {
                 if (text.equals("")) {
                     if (isChecked) {
                         toggleButtonState = 0;
-                        updateRecycleView(view);
                     } else {
                         toggleButtonState = 1;
-                        updateRecycleView(view);
                     }
+                    updateRecycleView();
                 } else {
                     if (isChecked) {
                         toggleButtonState = 0;
-                        updateRecycleView(view, text);
                     } else {
                         toggleButtonState = 1;
-                        updateRecycleView(view, text);
                     }
+                    updateRecycleView(text);
                 }
             }
         });
@@ -151,26 +149,18 @@ public class SearchFragment extends Fragment {
                 String text = editTextSearch.getText().toString();
 
                 if (text.equals("")) {
-                    if (toggleButtonState == 1) {
-                        updateRecycleView(view);
-                    } else {
-                        updateRecycleView(view);
-                    }
+                    updateRecycleView();
                 } else {
-                    if (toggleButtonState == 1) {
-                        updateRecycleView(view, text);
-                    } else {
-                        updateRecycleView(view, text);
-                    }
+                    updateRecycleView(text);
                 }
             }
         });
 
-        updateRecycleView(view);
+        updateRecycleView();
         return view;
     }
 
-    private void updateRecycleView(View view, final String searchRequest) {
+    private void updateRecycleView(final String searchRequest) {
 
         List<Element> newElements = new ArrayList<>();
 
@@ -206,14 +196,14 @@ public class SearchFragment extends Fragment {
                 }
             });
         } else {
-            CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(new ArrayList<>());
+            CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(new ArrayList<Element>());
             recyclerView.setAdapter(adapter);
             GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
             recyclerView.setLayoutManager(layoutManager);
         }
     }
 
-    private void updateRecycleView(View view) {
+    private void updateRecycleView() {
             switch (toggleButtonState) {
                 case 0:
                     //desc sort

@@ -24,5 +24,7 @@
     <string name="ascending_str">По возрастанию цены</string>
     <string name="filters_str">Фильтры</string>
     <string name="google">Войти с помощью аккаунта Google</string>
+    <string name="history">История</string>
+    <string name="exit">Выйти</string>
 
 </resources>

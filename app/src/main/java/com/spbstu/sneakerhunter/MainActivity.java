@@ -72,7 +72,5 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(R.drawable.baseline_search_24);
         Objects.requireNonNull(tabLayout.getTabAt(1))
                 .setIcon(R.drawable.baseline_person_24);
-
     }
-
 }
