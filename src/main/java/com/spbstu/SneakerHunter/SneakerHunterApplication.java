@@ -2,16 +2,17 @@ package com.spbstu.SneakerHunter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class SneakerHunterApplication {
-	public static CurrencyUnit RUB = Monetary.getCurrency("RUB");;
+	@Bean
+	public RestTemplate getRestTemplate(){
+		return new RestTemplate();
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SneakerHunterApplication.class, args);
 	}
-
 }
