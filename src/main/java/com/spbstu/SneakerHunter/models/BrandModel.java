@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table
-@ToString(of = {"id", "URL"})
+@ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
 public class BrandModel {
     @Id
@@ -17,7 +17,15 @@ public class BrandModel {
     private Long id;
 
     @NotNull
-    private String URL;
+    @Column(unique = true)
+    private String name;
+
+    public BrandModel() {
+    }
+
+    public BrandModel(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -27,13 +35,11 @@ public class BrandModel {
         this.id = id;
     }
 
-    public String getURL() {
-        return URL;
+    public String getName() {
+        return name;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public BrandModel() {}
 }

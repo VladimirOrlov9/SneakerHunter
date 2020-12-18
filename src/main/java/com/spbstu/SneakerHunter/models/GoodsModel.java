@@ -7,11 +7,13 @@ import lombok.ToString;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.net.URI;
+import java.util.List;
 
 @Entity
 @Table
-@ToString(of = {"id", "money", "gender", "color", "URL", "quantity"})
-@EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "money", "gender", "uri"})
+@EqualsAndHashCode(of = {"id", "category", "size", "brand", "picture", "money", "gender", "uri"})
 public class GoodsModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,9 +24,11 @@ public class GoodsModel {
     @JoinColumn(name = "category_id")
     private CategoryModel category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "size_id")
-    private SizeModel size;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable (name="goods_size",
+            joinColumns=@JoinColumn (name="goods_id"),
+            inverseJoinColumns=@JoinColumn(name="size_id"))
+    private List<SizeModel> size;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
@@ -35,24 +39,42 @@ public class GoodsModel {
     private PictureModel picture;
 
     @NotNull
-    private BigDecimal money;
+    private String money;
 
     @NotNull
     private String gender;
 
     @NotNull
-    private String color;
+    private String uri;
 
-    @NotNull
-    private String URL;
-
-    @NotNull
-    private Integer quantity;
+//    @NotNull
+//    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     @Nullable
     private UserModel customer;
+
+    public GoodsModel(CategoryModel category, List<SizeModel> size, BrandModel brand, PictureModel picture,
+                      String money, String gender, String uri, UserModel customer) {
+        this.category = category;
+        this.size = size;
+        this.brand = brand;
+        this.picture = picture;
+        this.money = money;
+        this.gender = gender;
+        this.uri = uri;
+//        this.quantity = quantity;
+        this.customer = customer;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
     public GoodsModel() {}
 
@@ -72,11 +94,11 @@ public class GoodsModel {
         this.category = category;
     }
 
-    public SizeModel getSize() {
+    public List<SizeModel> getSize() {
         return size;
     }
 
-    public void setSize(SizeModel size) {
+    public void setSize(List<SizeModel> size) {
         this.size = size;
     }
 
@@ -96,9 +118,11 @@ public class GoodsModel {
         this.picture = picture;
     }
 
-    public void setMoney(BigDecimal money) {
+    public void setMoney(String money) {
         this.money = money;
     }
+
+    public String getMoney() { return money; }
 
     public String getGender() {
         return gender;
@@ -108,27 +132,11 @@ public class GoodsModel {
         this.gender = gender;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getURL() {
-        return URL;
-    }
-
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+//    public Integer getQuantity() {
+//        return quantity;
+//    }
+//
+//    public void setQuantity(Integer quantity) {
+//        this.quantity = quantity;
+//    }
 }

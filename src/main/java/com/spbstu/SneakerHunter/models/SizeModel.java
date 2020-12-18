@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table
@@ -17,13 +18,28 @@ public class SizeModel {
     private Long id;
 
     @NotNull
-    private Integer size;
+    @Column(unique = true)
+    private String size;
 
-    public Integer getSize() {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable (name="goods_size",
+            joinColumns=@JoinColumn (name="size_id"),
+            inverseJoinColumns=@JoinColumn(name="goods_id"))
+    private List<GoodsModel> goods;
+
+    public SizeModel(String size) {
+        this.size = size;
+    }
+
+    public SizeModel() {
+
+    }
+
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(String size) {
         this.size = size;
     }
 }

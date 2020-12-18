@@ -17,7 +17,15 @@ public class CategoryModel {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String title;
+
+    public CategoryModel() {
+    }
+
+    public CategoryModel(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;

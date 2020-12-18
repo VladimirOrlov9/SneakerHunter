@@ -17,10 +17,14 @@ public class PictureModel {
     private Long id;
 
     @NotNull
-    private String picture;
-
+    @Column(unique = true)
+    private String url;
 
     public PictureModel() {}
+
+    public PictureModel(String url) {
+        this.url = url;
+    }
 
     public Long getId() {
         return id;
@@ -30,12 +34,12 @@ public class PictureModel {
         this.id = id;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getUrl() {
+        return url;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 
