@@ -3,39 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
-    <FrameLayout
+    <ImageButton
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:padding="10dp">
+        android:id="@+id/imageButtonMale"
+        android:src="@drawable/boy"
+        android:scaleType="centerInside"
+        android:background="@drawable/roundcorner"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/male_search_image"
+        android:layout_marginEnd="5dp"/>
 
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imageButtonMale"
-            android:src="@drawable/boy"
-            android:scaleType="centerInside"
-            android:background="@drawable/roundcorner"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/male_search_image" />
-    </FrameLayout>
-
-    <FrameLayout
+    <ImageButton
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:padding="10dp">
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imageButtonFemale"
-            android:scaleType="centerInside"
-            android:src="@drawable/girl"
-            android:background="@drawable/roundcorner"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/female_search_image"/>
-    </FrameLayout>
+        android:id="@+id/imageButtonFemale"
+        android:scaleType="centerInside"
+        android:src="@drawable/girl"
+        android:background="@drawable/roundcorner"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/female_search_image"
+        android:layout_marginStart="5dp"/>
 </LinearLayout>

@@ -1,43 +1,82 @@
 package com.spbstu.sneakerhunter;
 
 public class Element  implements Comparable<Element> {
-    private String imageURL;
-    private String name;
-    private int price;
 
-    Element(String imageURL, String name, int price) {
-        this.imageURL = imageURL;
+    private final int sneakerKey;
+    private final String name;
+    private final double price;
+    private final String brand;
+    private final String category;
+    private final String color;
+    private final String shopIRL;
+    private final String imageURL;
+
+    public Element(int sneakerKey, String name, double price, String brand,
+                   String category, String color, String shopIRL, String imageURL) {
+        this.sneakerKey = sneakerKey;
         this.name = name;
         this.price = price;
-    }
-
-    public String getImageURL() {
-        return imageURL;
+        this.brand = brand;
+        this.category = category;
+        this.color = color;
+        this.shopIRL = shopIRL;
+        this.imageURL = imageURL;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public String  getPriceString() {
-        return Long.toString(price) + " руб.";
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getShopIRL() {
+        return shopIRL;
+    }
+
+    public String getImageURL() {
+        return imageURL;
     }
 
     @Override
     public String toString() {
         return "Element{" +
-                "imageURL='" + imageURL + '\'' +
-                ", name='" + name + '\'' +
-                ", price='" + price + '\'' +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", brand=" + brand +
+                ", category='" + category + '\'' +
+                ", color='" + color + '\'' +
+                ", shopIRL='" + shopIRL + '\'' +
+                ", imageURL='" + imageURL + '\'' +
                 '}';
     }
 
+    public String  getPriceString() {
+        return Double.toString(price) + " руб.";
+    }
+
+
     @Override
     public int compareTo(Element o) {
-        return this.getPrice() - o.getPrice();
+        double thisPrice = this.getPrice() * 100;
+        double oPrice = o.getPrice() * 100;
+        return (int)thisPrice - (int)oPrice;
+    }
+
+    public int getSneakerKey() {
+        return sneakerKey;
     }
 }
