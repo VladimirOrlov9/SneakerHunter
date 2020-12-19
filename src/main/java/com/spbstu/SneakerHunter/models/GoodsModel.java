@@ -1,11 +1,17 @@
 package com.spbstu.SneakerHunter.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.spbstu.SneakerHunter.repos.GoodsRepo;
 import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
@@ -14,13 +20,17 @@ import java.util.List;
 @Table
 @ToString(of = {"id", "money", "gender", "uri"})
 @EqualsAndHashCode(of = {"id", "category", "size", "brand", "picture", "money", "gender", "uri"})
-public class GoodsModel {
+@Data
+@JsonIdentityInfo(
+        generator= ObjectIdGenerators.PropertyGenerator.class,
+        property="id", scope = GoodsModel.class)
+public class GoodsModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private CategoryModel category;
 
@@ -28,6 +38,7 @@ public class GoodsModel {
     @JoinTable (name="goods_size",
             joinColumns=@JoinColumn (name="goods_id"),
             inverseJoinColumns=@JoinColumn(name="size_id"))
+    @JsonManagedReference
     private List<SizeModel> size;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-@Component
+//@Component
 @EnableScheduling
 public class DataBaseRefresher {
     private CategoryRepo categoryRepo;
@@ -78,13 +78,13 @@ public class DataBaseRefresher {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("x-rapidapi-key", "5da9217069msh6e8e27c8df6dfb8p1e5eafjsnf530c07e1568");
+        headers.add("x-rapidapi-key", "cb119519a1mshb1deaa42c38add2p1e2208jsn76d2565e7003");
         headers.add("x-rapidapi-host", "asos2.p.rapidapi.com");
         return new HttpEntity<>("body", headers);
     }
 
     public void getSneakers(){
-        final Integer limit = 100;
+        final Integer limit = 5;
 
         RestTemplate template = new RestTemplate();
         ResponseEntity<Sneakers> response = template.exchange(

@@ -1,6 +1,8 @@
 package com.spbstu.SneakerHunter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -10,6 +12,8 @@ import javax.persistence.*;
 @Table
 @ToString(of = {"id"})
 @EqualsAndHashCode(of = {"id"})
+@Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PictureModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

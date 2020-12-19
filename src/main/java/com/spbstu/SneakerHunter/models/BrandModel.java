@@ -1,6 +1,8 @@
 package com.spbstu.SneakerHunter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -10,6 +12,8 @@ import javax.persistence.*;
 @Table
 @ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
+@Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BrandModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,10 +21,15 @@ public class BrandModel {
     private Long id;
 
     @NotNull
-    @Column(unique = true)
+    @Column(name = "name", unique = true)
     private String name;
 
     public BrandModel() {
+    }
+
+    public BrandModel(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public BrandModel(String name) {

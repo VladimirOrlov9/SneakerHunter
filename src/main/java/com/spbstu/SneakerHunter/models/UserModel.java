@@ -1,5 +1,6 @@
 package com.spbstu.SneakerHunter.models;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Table
 @ToString(of = {"id", "name", "email", "gender"})
 @EqualsAndHashCode(of = {"id"})
+@Data
 public class UserModel {
     @Id
     private String id;

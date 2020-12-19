@@ -1,6 +1,10 @@
 package com.spbstu.SneakerHunter.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sun.istack.NotNull;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -11,6 +15,7 @@ import java.util.List;
 @Table
 @ToString(of = {"id", "size"})
 @EqualsAndHashCode(of = {"id"})
+@Data
 public class SizeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,6 +30,7 @@ public class SizeModel {
     @JoinTable (name="goods_size",
             joinColumns=@JoinColumn (name="size_id"),
             inverseJoinColumns=@JoinColumn(name="goods_id"))
+    @JsonBackReference
     private List<GoodsModel> goods;
 
     public SizeModel(String size) {

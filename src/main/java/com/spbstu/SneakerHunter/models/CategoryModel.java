@@ -1,16 +1,19 @@
 package com.spbstu.SneakerHunter.models;
 
 import com.sun.istack.NotNull;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table
 @ToString(of = {"id", "title"})
 @EqualsAndHashCode(of = {"id"})
-public class CategoryModel {
+@Data
+public class CategoryModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull
@@ -21,6 +24,11 @@ public class CategoryModel {
     private String title;
 
     public CategoryModel() {
+    }
+
+    public CategoryModel(Long id, String title) {
+        this.id = id;
+        this.title = title;
     }
 
     public CategoryModel(String title) {
