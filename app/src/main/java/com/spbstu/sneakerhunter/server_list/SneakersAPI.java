@@ -12,4 +12,7 @@ public interface SneakersAPI {
 
     @GET("sneakers")
     Call<List<Sneaker>> getSneakers();
+
+    @GET("size")
+    Call<List<Size>> getSizes();
 }

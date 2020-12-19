@@ -89,6 +89,10 @@ public class Sneaker implements Comparable<Sneaker> {
         return money;
     }
 
+    public int getDoubleMoney() {
+        return (int)Math.round(Double.parseDouble(money.substring(1)));
+    }
+
     public void setMoney(String money) {
         this.money = money;
     }
@@ -119,6 +123,8 @@ public class Sneaker implements Comparable<Sneaker> {
 
     @Override
     public int compareTo(Sneaker o) {
-        return this.getMoney().compareTo(o.getMoney());
+        int price1 = (int) Math.round(Double.parseDouble(this.getMoney().substring(1)));
+        int price2 =(int) Math.round(Double.parseDouble(o.getMoney().substring(1)));
+        return price1 - price2;
     }
 }

@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
@@ -25,12 +26,15 @@ import android.widget.ToggleButton;
 import com.spbstu.sneakerhunter.adapters.CaptionedImagesAdapter;
 import com.spbstu.sneakerhunter.HistoryDatabaseHelper;
 import com.spbstu.sneakerhunter.R;
+import com.spbstu.sneakerhunter.server_list.Size;
 import com.spbstu.sneakerhunter.server_list.SneakersAPI;
 import com.spbstu.sneakerhunter.server_list.Sneaker;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +43,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchFragment extends Fragment {
+
+    public static int SORT_PRICE_FROM = 0;
+    public static int SORT_PRICE_TO = 0;
+    public static String SORT_SIZE = "";
+    public static String SORT_BRAND = "";
+    public static String SORT_COLOR = "";
+    public static boolean IS_SORT_PRICE = false;
+    public static boolean IS_SORT_SIZE = false;
+    public static boolean IS_SORT_BRAND = false;
+    public static boolean IS_SORT_COLOR = false;
 
     private RecyclerView recyclerView;
     private Retrofit retrofit;
@@ -159,20 +173,64 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        Button filterButton = (Button) view.findViewById(R.id.filter_button);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FiltersFragment nextFrag= new FiltersFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_container, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
 
         return view;
     }
 
+
     private void updateRecycleView(final String searchRequest) {
 
-        List<Sneaker> newElements = new ArrayList<>();
-
-        for (Sneaker value : elements) {
-            if (value.getName().toLowerCase().contains(searchRequest.toLowerCase())
-                    && (value.getGender().equals(gender))) {
-                newElements.add(value);
-            }
-        }
+        List<Sneaker> newElements = elements
+                .stream()
+                .filter(value -> value.getName().toLowerCase().contains(searchRequest.toLowerCase())
+                        && (value.getGender().equals(gender)))
+                .filter(c -> {
+                    if (IS_SORT_PRICE) {
+                        return (SORT_PRICE_FROM <= c.getDoubleMoney() && (c.getDoubleMoney() <= SORT_PRICE_TO));
+                    } else {
+                        return true;
+                    }
+                })
+                .filter(c -> {
+                    if (IS_SORT_SIZE) {
+                        List<Size> sizes = c.getSize();
+                        for (Size size : sizes) {
+                            if (size.getSize().equals(SORT_SIZE)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    } else {
+                        return true;
+                    }
+                })
+                .filter(c -> {
+                    if (IS_SORT_BRAND) {
+                        return (SORT_BRAND.equals(c.getBrand().getName()));
+                    } else {
+                        return true;
+                    }
+                })
+//                .filter(c -> {
+//                    if (IS_SORT_COLOR) {
+//                        return (SORT_COLOR.equals(c.getColor()));
+//                    } else {
+//                        return false;
+//                    }
+//                })
+                .collect(Collectors.toList());
 
         if (newElements.size() > 0) {
             switch (toggleButtonState) {
@@ -208,28 +266,58 @@ public class SearchFragment extends Fragment {
     }
 
     private void updateRecycleView() {
+        System.out.println(SORT_PRICE_TO);
+        List<Sneaker> newElements = elements
+                .stream()
+                .filter(value -> (value.getGender().equals(gender)))
+                .filter(c -> {
+                    if (IS_SORT_PRICE) {
+                        return (SORT_PRICE_FROM <= c.getDoubleMoney() && (c.getDoubleMoney() <= SORT_PRICE_TO));
+                    } else {
+                        return true;
+                    }
+                })
+                .filter(c -> {
+                    if (IS_SORT_SIZE) {
+                        List<Size> sizes = c.getSize();
+                        for (Size size : sizes) {
+                            if (size.getSize().equals(SORT_SIZE)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    } else {
+                        return true;
+                    }
+                })
+                .filter(c -> {
+                    if (IS_SORT_BRAND) {
+                        return (SORT_BRAND.equals(c.getBrand().getName()));
+                    } else {
+                        return true;
+                    }
+                })
+//                .filter(c -> {
+//                    if (IS_SORT_COLOR) {
+//                        return (SORT_COLOR.equals(c.getColor()));
+//                    } else {
+//                        return false;
+//                    }
+//                })
+                .collect(Collectors.toList());
 
-        List<Sneaker> newElements = new ArrayList<>();
-
-        for (Sneaker value : elements) {
-            System.out.println(value.getGender());
-            if ((value.getGender().equals(gender))) {
-                newElements.add(value);
-            }
+        switch (toggleButtonState) {
+            case 0:
+                //desc sort
+                Collections.sort(newElements);
+                break;
+            case 1:
+                //asc sort
+                newElements.sort(Collections.reverseOrder());
+                break;
+            default:
+                break;
         }
-
-            switch (toggleButtonState) {
-                case 0:
-                    //desc sort
-                    Collections.sort(newElements);
-                    break;
-                case 1:
-                    //asc sort
-                    newElements.sort(Collections.reverseOrder());
-                    break;
-                default:
-                    break;
-            }
 
         CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(newElements);
         recyclerView.setAdapter(adapter);
@@ -263,6 +351,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        updateRecycleView();
     }
 
     @Override
