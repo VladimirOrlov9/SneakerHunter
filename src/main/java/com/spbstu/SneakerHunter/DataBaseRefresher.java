@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-//@Component
+@Component
 @EnableScheduling
 public class DataBaseRefresher {
     private CategoryRepo categoryRepo;
@@ -177,7 +177,7 @@ public class DataBaseRefresher {
             picture = pictureRepo.findByUrl(imageUrl);
         }
 
-        GoodsModel goods = new GoodsModel(category, sizes, brand, picture,
+        GoodsModel goods = new GoodsModel(category, sneaker.getName(), sizes, brand, picture,
                 sneaker.getVariants().get(0).getPrice().getCurrent().getText(), sneaker.getGender(),
                 sneaker.getBaseUrl().toString() + "/" + url, null);
         goodsList.add(goods);

@@ -34,6 +34,9 @@ public class GoodsModel implements Serializable {
     @JoinColumn(name = "category_id")
     private CategoryModel category;
 
+    @NotNull
+    private String name;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable (name="goods_size",
             joinColumns=@JoinColumn (name="goods_id"),
@@ -58,6 +61,7 @@ public class GoodsModel implements Serializable {
     @NotNull
     private String uri;
 
+
 //    @NotNull
 //    private Integer quantity;
 
@@ -66,9 +70,10 @@ public class GoodsModel implements Serializable {
     @Nullable
     private UserModel customer;
 
-    public GoodsModel(CategoryModel category, List<SizeModel> size, BrandModel brand, PictureModel picture,
+    public GoodsModel(CategoryModel category, String name, List<SizeModel> size, BrandModel brand, PictureModel picture,
                       String money, String gender, String uri, UserModel customer) {
         this.category = category;
+        this.name = name;
         this.size = size;
         this.brand = brand;
         this.picture = picture;
@@ -76,6 +81,22 @@ public class GoodsModel implements Serializable {
         this.gender = gender;
         this.uri = uri;
 //        this.quantity = quantity;
+        this.customer = customer;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UserModel getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(UserModel customer) {
         this.customer = customer;
     }
 
