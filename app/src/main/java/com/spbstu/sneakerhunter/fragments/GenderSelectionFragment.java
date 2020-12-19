@@ -1,4 +1,4 @@
-package com.spbstu.sneakerhunter;
+package com.spbstu.sneakerhunter.fragments;
 
 import android.os.Bundle;
 
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import com.spbstu.sneakerhunter.R;
 
 public class GenderSelectionFragment extends Fragment {
 
@@ -34,7 +36,7 @@ public class GenderSelectionFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    SearchFragment nextFrag= new SearchFragment(0);
+                    SearchFragment nextFrag= new SearchFragment("Men");
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frame_container, nextFrag, "findThisFragment")
                             .addToBackStack(null)
@@ -47,7 +49,7 @@ public class GenderSelectionFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    SearchFragment nextFrag= new SearchFragment(1);
+                    SearchFragment nextFrag= new SearchFragment("Women");
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frame_container, nextFrag, "findThisFragment")
                             .addToBackStack(null)

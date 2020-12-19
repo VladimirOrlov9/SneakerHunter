@@ -1,4 +1,4 @@
-package com.spbstu.sneakerhunter;
+package com.spbstu.sneakerhunter.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.spbstu.sneakerhunter.R;
+import com.spbstu.sneakerhunter.server_list.Sneaker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +20,7 @@ public class ShopsCardAdapter extends RecyclerView.Adapter<ShopsCardAdapter.View
 
     private ShopsCardAdapter.Listener listener;
     //TODO replace list of elements with new shop class and refactor onBindViewHolder using new list
-    private  List<Element> elements;
+    private  List<Sneaker> elements;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -33,7 +36,7 @@ public class ShopsCardAdapter extends RecyclerView.Adapter<ShopsCardAdapter.View
         void onClick(int position);
     }
 
-    ShopsCardAdapter(List<Element> elements) {
+    ShopsCardAdapter(List<Sneaker> elements) {
         this.elements = new ArrayList<>();
         this.elements = elements;
     }
@@ -59,7 +62,7 @@ public class ShopsCardAdapter extends RecyclerView.Adapter<ShopsCardAdapter.View
         shopNameTextView.setText(elements.get(position).getName());
 
         TextView elementPriceTextView = (TextView) cardView.findViewById(R.id.element_price);
-        elementPriceTextView.setText(elements.get(position).getPriceString());
+        elementPriceTextView.setText(elements.get(position).getMoney());
 
         ImageButton elementDeletionButton = (ImageButton) cardView.findViewById(R.id.element_deletion);
 

@@ -1,4 +1,4 @@
-package com.spbstu.sneakerhunter;
+package com.spbstu.sneakerhunter.fragments;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,49 +20,74 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.spbstu.sneakerhunter.adapters.CaptionedImagesAdapter;
+import com.spbstu.sneakerhunter.HistoryDatabaseHelper;
+import com.spbstu.sneakerhunter.R;
+import com.spbstu.sneakerhunter.server_list.SneakersAPI;
+import com.spbstu.sneakerhunter.server_list.Sneaker;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private Retrofit retrofit;
 
-    private int gender; //0 - male, 1 - female
+    private final String gender;
     private int toggleButtonState = 0; //0 - desc, 1 - asc
-    private List<Element> elements = new ArrayList<>(Arrays.asList(
-            new Element(0,"Puma RS-2K Streaming", 9090,
-                     "Puma", "Sneakers", "black",
-                    "https://www.asos.com/ru/nike/krasnye-krossovki-nike-air-vapormax-2020-" +
-                            "flyknit/prd/22107686?clr=krasnyj&colourwayid=60374145&SearchQuery=&cid=5775",
-                    "https://images.asos-media.com/products/krossovki-chernogo-i-belogo-ts" +
-                            "vetov-puma-rs-2k-streaming/22016066-1-pumablackpumawhit?$XXL$&wid=513&fit=constrain"),
-            new Element(3, "Nike Exosense", 1020,
-                    "Nike", "Sneakers", "red",
-                    "https://www.asos.com/ru/nike/chernye-krossovki-nike-air-max-270/prd/11" +
-                            "132622?ctaref=recently+viewed",
-                    "https://images.asos-media.com/products/chernye" +
-                            "-krossovki-nike-exosense/22795391-1-black?$XXL$&wid=513&fit=constrain"),
-            new Element(4, "adidas Originals Rivalry", 660,
-                    "adidas", "Sneakers", "green",
-                    "https://www.asos.com/ru/nike/zelenye-krossovki-nike-d-ms-x-waffle/prd" +
-                            "/20524243?ctaref=recently+viewed",
-                    "https://images.asos-media.com/products/nizkie-belye-krossovki-s-te" +
-                            "mno-sinimi-poloskami-adidas-originals-rivalry/20635266-1-white?$XXL$&wid" +
-                            "=513&fit=constrain")));
+    private List<Sneaker> elements = new ArrayList<>();
 
 
-    SearchFragment(int genderId) {
+    SearchFragment(String genderId) {
         this.gender = genderId;
+    }
+
+    private Retrofit getClient() {
+        if(retrofit == null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(SneakersAPI.URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit;
+    }
+
+
+    public void parseJSONsFromServer() {
+
+        SneakersAPI sneakersAPI = getClient().create(SneakersAPI.class);
+
+        Call<List<Sneaker>> sneakers = sneakersAPI.getSneakers();
+        sneakers.enqueue(new Callback<List<Sneaker>>() {
+            @Override
+            public void onResponse(Call<List<Sneaker>> call, Response<List<Sneaker>> response) {
+                if (response.isSuccessful()) {
+                    elements = response.body();
+                    updateRecycleView();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Sneaker>> call, Throwable t) {
+                System.out.println("fail: " + t);
+            }
+        });
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -71,6 +96,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.search_recycler);
+        parseJSONsFromServer();
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -85,7 +111,7 @@ public class SearchFragment extends Fragment {
 
         ToggleButton sortToggleButton = (ToggleButton) view.findViewById(R.id.sort_toggle_button);
 
-        final EditText editTextSearch = (EditText) view.findViewById(R.id.query_edit_text);
+        EditText editTextSearch = (EditText) view.findViewById(R.id.query_edit_text);
 
         sortToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -133,16 +159,17 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        updateRecycleView();
+
         return view;
     }
 
     private void updateRecycleView(final String searchRequest) {
 
-        List<Element> newElements = new ArrayList<>();
+        List<Sneaker> newElements = new ArrayList<>();
 
-        for (Element value : elements) {
-            if (value.getName().toLowerCase().contains(searchRequest.toLowerCase())) {
+        for (Sneaker value : elements) {
+            if (value.getName().toLowerCase().contains(searchRequest.toLowerCase())
+                    && (value.getGender().equals(gender))) {
                 newElements.add(value);
             }
         }
@@ -155,7 +182,7 @@ public class SearchFragment extends Fragment {
                     break;
                 case 1:
                     //asc sort
-                    Collections.sort(newElements, Collections.reverseOrder());
+                    newElements.sort(Collections.reverseOrder());
                     break;
                 default:
                     break;
@@ -173,7 +200,7 @@ public class SearchFragment extends Fragment {
                 }
             });
         } else {
-            CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(new ArrayList<Element>());
+            CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(new ArrayList<Sneaker>());
             recyclerView.setAdapter(adapter);
             GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
             recyclerView.setLayoutManager(layoutManager);
@@ -181,20 +208,30 @@ public class SearchFragment extends Fragment {
     }
 
     private void updateRecycleView() {
+
+        List<Sneaker> newElements = new ArrayList<>();
+
+        for (Sneaker value : elements) {
+            System.out.println(value.getGender());
+            if ((value.getGender().equals(gender))) {
+                newElements.add(value);
+            }
+        }
+
             switch (toggleButtonState) {
                 case 0:
                     //desc sort
-                    Collections.sort(elements);
+                    Collections.sort(newElements);
                     break;
                 case 1:
                     //asc sort
-                    Collections.sort(elements,Collections.reverseOrder());
+                    newElements.sort(Collections.reverseOrder());
                     break;
                 default:
                     break;
             }
 
-        CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(elements);
+        CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(newElements);
         recyclerView.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
@@ -203,7 +240,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(int position) {
                 ContentValues shoeValues = new ContentValues();
-                shoeValues.put("SNEAKER_KEY", elements.get(position).getSneakerKey());
+                shoeValues.put("SNEAKER_KEY", elements.get(position).getId());
 
                 SQLiteOpenHelper historyDatabaseHelper = new HistoryDatabaseHelper(getContext());
                 try {
@@ -221,8 +258,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-
     }
 
     @Override

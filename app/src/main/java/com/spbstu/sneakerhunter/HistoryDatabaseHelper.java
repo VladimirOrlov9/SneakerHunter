@@ -8,7 +8,7 @@ public class HistoryDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_MAME = "SneakerHunterHistory";
     private static final int DB_VERSION = 2;
 
-    HistoryDatabaseHelper (Context context){
+    public HistoryDatabaseHelper(Context context){
         super(context, DB_MAME, null, DB_VERSION);
     }
 

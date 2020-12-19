@@ -11,6 +11,8 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
+import com.spbstu.sneakerhunter.fragments.ContainerSearchFragment;
+import com.spbstu.sneakerhunter.fragments.LoginContainerFragment;
 
 import java.util.Objects;
 

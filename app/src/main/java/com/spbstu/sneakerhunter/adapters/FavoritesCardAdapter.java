@@ -1,4 +1,4 @@
-package com.spbstu.sneakerhunter;
+package com.spbstu.sneakerhunter.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,14 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.spbstu.sneakerhunter.R;
+import com.spbstu.sneakerhunter.server_list.Sneaker;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaptionedImagesAdapter extends RecyclerView.Adapter<CaptionedImagesAdapter.ViewHolder> {
+public class FavoritesCardAdapter extends RecyclerView.Adapter<FavoritesCardAdapter.ViewHolder> {
 
-    private Listener listener;
-    private List<Element> elements;
+    private FavoritesCardAdapter.Listener listener;
+    private List<Sneaker> elements;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -58,41 +62,44 @@ public class CaptionedImagesAdapter extends RecyclerView.Adapter<CaptionedImages
         }
     }
 
-    interface Listener {
+    public interface Listener {
         void onClick(int position);
     }
 
-    CaptionedImagesAdapter(List<Element> elements) {
+    public FavoritesCardAdapter(List<Sneaker> elements) {
         this.elements = new ArrayList<>();
         this.elements = elements;
     }
 
     @NonNull
     @Override
-    public CaptionedImagesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavoritesCardAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CardView cardView = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_captioned_image, parent, false);
+                .inflate(R.layout.favorites_cardview, parent, false);
 
-        return new ViewHolder(cardView);
+        return new FavoritesCardAdapter.ViewHolder(cardView);
     }
 
-    public void setListener(Listener listener) {
+    public void setListener(FavoritesCardAdapter.Listener listener) {
         this.listener = listener;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull FavoritesCardAdapter.ViewHolder holder, final int position) {
         CardView cardView = holder.cardView;
         ImageView imageView = (ImageView) cardView.findViewById(R.id.element_image);
-        
-        new DownloadImageTask(imageView).execute(elements.get(position).getImageURL());
+
+        new FavoritesCardAdapter.DownloadImageTask(imageView).execute(elements.get(position).getPicture().getUrl());
         imageView.setContentDescription(elements.get(position).getName());
 
         TextView elementNameTextView = (TextView) cardView.findViewById(R.id.element_name);
         elementNameTextView.setText(elements.get(position).getName());
 
         TextView elementPriceTextView = (TextView) cardView.findViewById(R.id.element_price);
-        elementPriceTextView.setText(elements.get(position).getPriceString());
+        elementPriceTextView.setText(elements.get(position).getMoney());
+
+        ImageButton elementDeletionButton = (ImageButton) cardView.findViewById(R.id.element_deletion);
+
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override

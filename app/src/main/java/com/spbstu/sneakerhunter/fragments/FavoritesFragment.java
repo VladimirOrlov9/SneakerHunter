@@ -1,4 +1,4 @@
-package com.spbstu.sneakerhunter;
+package com.spbstu.sneakerhunter.fragments;
 
 import android.os.Bundle;
 
@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.spbstu.sneakerhunter.adapters.FavoritesCardAdapter;
+import com.spbstu.sneakerhunter.R;
+import com.spbstu.sneakerhunter.server_list.Sneaker;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,26 +25,7 @@ public class FavoritesFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
-    private List<Element> favoriteElements = new ArrayList<>(Arrays.asList(
-            new Element(0,"Puma RS-2K Streaming", 9090,
-                    "Puma", "Sneakers", "black",
-                    "https://www.asos.com/ru/nike/krasnye-krossovki-nike-air-vapormax-2020-" +
-                            "flyknit/prd/22107686?clr=krasnyj&colourwayid=60374145&SearchQuery=&cid=5775",
-                    "https://images.asos-media.com/products/krossovki-chernogo-i-belogo-ts" +
-                            "vetov-puma-rs-2k-streaming/22016066-1-pumablackpumawhit?$XXL$&wid=513&fit=constrain"),
-            new Element(1, "Nike Exosense", 10250.5,
-                    "Nike", "Sneakers", "red",
-                    "https://www.asos.com/ru/nike/chernye-krossovki-nike-air-max-270/prd/11" +
-                            "132622?ctaref=recently+viewed",
-                    "https://images.asos-media.com/products/chernye" +
-                            "-krossovki-nike-exosense/22795391-1-black?$XXL$&wid=513&fit=constrain"),
-            new Element(2,"adidas Originals Rivalry", 10250.2,
-                    "adidas", "Sneakers", "green",
-                    "https://www.asos.com/ru/nike/zelenye-krossovki-nike-d-ms-x-waffle/prd" +
-                            "/20524243?ctaref=recently+viewed",
-                    "https://images.asos-media.com/products/nizkie-belye-krossovki-s-te" +
-                            "mno-sinimi-poloskami-adidas-originals-rivalry/20635266-1-white?$XXL$&wid" +
-                            "=513&fit=constrain")));
+    private List<Sneaker> favoriteElements = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
