@@ -19,7 +19,7 @@
         android:layout_height="?attr/actionBarSize"
         app:tabIndicatorColor="@color/colorAccent"
         app:tabGravity="fill"
-        android:background="#3177A19D"
+        android:background="#FFFFFF"
         app:tabMaxWidth="0dp"
         app:tabMode="fixed"
         android:layout_alignParentBottom="true"/>
