@@ -18,8 +18,8 @@ import java.util.List;
 
 @Entity
 @Table
-@ToString(of = {"id", "money", "gender", "uri"})
-@EqualsAndHashCode(of = {"id", "category", "size", "brand", "picture", "money", "gender", "uri"})
+@ToString(of = {"id", "money", "gender", "uri", "picture", "name"})
+@EqualsAndHashCode(of = {"id", "size", "brand", "picture", "money", "gender", "uri"})
 @Data
 @JsonIdentityInfo(
         generator= ObjectIdGenerators.PropertyGenerator.class,
@@ -31,8 +31,8 @@ public class GoodsModel implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
-    private CategoryModel category;
+    @JoinColumn(name = "shop_id")
+    private ShopModel shop;
 
     @NotNull
     private String name;
@@ -42,10 +42,12 @@ public class GoodsModel implements Serializable {
             joinColumns=@JoinColumn (name="goods_id"),
             inverseJoinColumns=@JoinColumn(name="size_id"))
     @JsonManagedReference
+    @Nullable
     private List<SizeModel> size;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
+    @Nullable
     private BrandModel brand;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -70,9 +72,9 @@ public class GoodsModel implements Serializable {
     @Nullable
     private UserModel customer;
 
-    public GoodsModel(CategoryModel category, String name, List<SizeModel> size, BrandModel brand, PictureModel picture,
+    public GoodsModel(ShopModel shop, String name, List<SizeModel> size, BrandModel brand, PictureModel picture,
                       String money, String gender, String uri, UserModel customer) {
-        this.category = category;
+        this.shop = shop;
         this.name = name;
         this.size = size;
         this.brand = brand;
@@ -118,13 +120,13 @@ public class GoodsModel implements Serializable {
         this.id = id;
     }
 
-    public CategoryModel getCategory() {
-        return category;
-    }
-
-    public void setCategory(CategoryModel category) {
-        this.category = category;
-    }
+//    public CategoryModel getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(CategoryModel category) {
+//        this.category = category;
+//    }
 
     public List<SizeModel> getSize() {
         return size;

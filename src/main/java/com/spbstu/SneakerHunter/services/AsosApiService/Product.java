@@ -1,4 +1,4 @@
-package com.spbstu.SneakerHunter;
+package com.spbstu.SneakerHunter.services.AsosApiService;
 
 import com.fasterxml.jackson.annotation.*;
 

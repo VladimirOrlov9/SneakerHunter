@@ -22,7 +22,7 @@ public class GoodsController {
         return goodsRepo.findAll();
     }
 
-    @GetMapping({"id"})
+    @GetMapping({"{id}"})
     public GoodsModel getOne(@PathVariable("id") GoodsModel goods){
         return goods;
     }
@@ -32,7 +32,7 @@ public class GoodsController {
         return goodsRepo.save(goods);
     }
 
-    @DeleteMapping({"id"})
+    @DeleteMapping({"{id}"})
     public void delete(@PathVariable("id") GoodsModel goods){
         goodsRepo.delete(goods);
     }

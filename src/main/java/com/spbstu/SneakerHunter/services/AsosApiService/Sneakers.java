@@ -1,5 +1,5 @@
 
-package com.spbstu.SneakerHunter;
+package com.spbstu.SneakerHunter.services.AsosApiService;
 
 import java.util.HashMap;
 import java.util.List;
