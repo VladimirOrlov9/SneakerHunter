@@ -21,7 +21,7 @@
             app:layout_scrollFlags="scroll|enterAlways"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.FiltersFragment"
@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/l1"
             android:layout_marginTop="12dp">
 
             <TextView
@@ -66,6 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/l2"
+            android:layout_below ="@id/l1"
             android:layout_marginTop="12dp">
 
             <TextView
@@ -85,6 +88,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_below ="@id/l2"
+            android:id="@+id/l3"
             android:orientation="horizontal"
             android:layout_marginTop="12dp">
 
@@ -106,6 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"
+            android:layout_below ="@id/l3"
             android:layout_marginTop="12dp">
 
             <TextView
@@ -123,10 +129,13 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/confirm_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/confirm_button"
-            android:text="@string/accept_string"/>
-    </LinearLayout>
+            android:text="@string/accept_string"
+            android:background="#FFFFFF"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

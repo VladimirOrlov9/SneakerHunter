@@ -42,18 +42,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getResources().getText(R.string.search);
-                case 1:
-                    return getResources().getText(R.string.account);
-            }
-
-            return getResources().getText(R.string.search);
-        }
 
     }
 
