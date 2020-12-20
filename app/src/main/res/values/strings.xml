@@ -26,5 +26,12 @@
     <string name="google">Войти с помощью аккаунта Google</string>
     <string name="history">История</string>
     <string name="exit">Выйти</string>
+    <string name="price_string">Цена</string>
+    <string name="from_string">От</string>
+    <string name="to_string">До</string>
+    <string name="size_string">Размер</string>
+    <string name="brand_string">Бренд</string>
+    <string name="color_string">Цвет</string>
+    <string name="accept_string">Применить</string>
 
 </resources>
