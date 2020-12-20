@@ -23,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
+import com.spbstu.sneakerhunter.SneakerItemFragment;
 import com.spbstu.sneakerhunter.adapters.CaptionedImagesAdapter;
 import com.spbstu.sneakerhunter.HistoryDatabaseHelper;
 import com.spbstu.sneakerhunter.R;
@@ -152,14 +153,10 @@ public class SearchFragment extends Fragment {
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -254,7 +251,11 @@ public class SearchFragment extends Fragment {
             adapter.setListener(new CaptionedImagesAdapter.Listener() {
                 @Override
                 public void onClick(int position) {
-
+                    SneakerItemFragment nextFrag= new SneakerItemFragment(newElements.get(position).getId());
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame_container, nextFrag, "findThisFragment")
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
         } else {
@@ -266,7 +267,6 @@ public class SearchFragment extends Fragment {
     }
 
     private void updateRecycleView() {
-        System.out.println(SORT_PRICE_TO);
         List<Sneaker> newElements = elements
                 .stream()
                 .filter(value -> (value.getGender().equals(gender)))
@@ -327,18 +327,24 @@ public class SearchFragment extends Fragment {
         adapter.setListener(new CaptionedImagesAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                ContentValues shoeValues = new ContentValues();
-                shoeValues.put("SNEAKER_KEY", elements.get(position).getId());
+//                ContentValues shoeValues = new ContentValues();
+//                shoeValues.put("SNEAKER_KEY", elements.get(position).getId());
+//
+//                SQLiteOpenHelper historyDatabaseHelper = new HistoryDatabaseHelper(getContext());
+//                try {
+//                    SQLiteDatabase db =  historyDatabaseHelper.getWritableDatabase();
+//
+//                    db.insertOrThrow("HISTORY", null, shoeValues);
+//                    db.close();
+//                } catch(SQLiteException e) {
+//                    System.out.println("This item already in the history list, nothing added.");
+//                }
 
-                SQLiteOpenHelper historyDatabaseHelper = new HistoryDatabaseHelper(getContext());
-                try {
-                    SQLiteDatabase db =  historyDatabaseHelper.getWritableDatabase();
-
-                    db.insertOrThrow("HISTORY", null, shoeValues);
-                    db.close();
-                } catch(SQLiteException e) {
-                    System.out.println("This item already in the history list, nothing added.");
-                }
+                SneakerItemFragment nextFrag= new SneakerItemFragment(newElements.get(position).getId());
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_container, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

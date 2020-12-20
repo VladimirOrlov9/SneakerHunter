@@ -89,7 +89,6 @@ public class CaptionedImagesAdapter extends RecyclerView.Adapter<CaptionedImages
         ImageView imageView = (ImageView) cardView.findViewById(R.id.element_image);
         
         new DownloadImageTask(imageView).execute(elements.get(position).getPicture().getUrl());
-        System.out.println(elements.get(position).getPicture().getUrl());
         imageView.setContentDescription(elements.get(position).getName());
 
         TextView elementNameTextView = (TextView) cardView.findViewById(R.id.element_name);
