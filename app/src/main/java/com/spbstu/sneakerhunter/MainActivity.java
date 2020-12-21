@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
         SectionsPagerAdapter(FragmentManager fm) {
             super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
             return new ContainerSearchFragment();
         }
+
+
+
     }
 
     @Override
