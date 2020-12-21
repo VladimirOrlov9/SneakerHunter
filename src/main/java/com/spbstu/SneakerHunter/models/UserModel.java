@@ -17,8 +17,8 @@ import java.util.List;
 public class UserModel {
     @Id
     private String id;
+    @Column(unique = true)
     private String email;
-    private LocalDateTime lastVisit;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable (name="goods_user",

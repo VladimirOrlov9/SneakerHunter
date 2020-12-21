@@ -1,6 +1,7 @@
 package com.spbstu.SneakerHunter.controllers;
 
 import com.spbstu.SneakerHunter.models.GoodsModel;
+import com.spbstu.SneakerHunter.models.SizeModel;
 import com.spbstu.SneakerHunter.repos.GoodsRepo;
 import com.spbstu.SneakerHunter.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ public class FavoritesController {
         this.userRepo = userRepo;
     }
 
-    @GetMapping
-    public String list(){
-        return "Hello pidor";
-    }
+
+
 }
