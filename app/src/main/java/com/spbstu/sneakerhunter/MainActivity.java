@@ -13,10 +13,12 @@ import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 import com.spbstu.sneakerhunter.fragments.ContainerSearchFragment;
 import com.spbstu.sneakerhunter.fragments.LoginContainerFragment;
+import com.spbstu.sneakerhunter.fragments.ProfileScreenFragment;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+    public static String USER_ID;
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         SectionsPagerAdapter(FragmentManager fm) {

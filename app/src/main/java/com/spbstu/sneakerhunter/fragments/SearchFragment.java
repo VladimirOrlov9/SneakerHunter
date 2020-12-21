@@ -218,6 +218,7 @@ public class SearchFragment extends Fragment {
 
 
     private void updateRecycleView(final String searchRequest) {
+
         newElements = elements
                 .stream()
                 .filter(value -> value.getName().toLowerCase().contains(searchRequest.toLowerCase())

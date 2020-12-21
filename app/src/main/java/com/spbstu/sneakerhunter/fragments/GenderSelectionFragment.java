@@ -13,6 +13,8 @@ import com.spbstu.sneakerhunter.R;
 
 public class GenderSelectionFragment extends Fragment {
 
+    public static boolean IS_AUTHORIZED = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

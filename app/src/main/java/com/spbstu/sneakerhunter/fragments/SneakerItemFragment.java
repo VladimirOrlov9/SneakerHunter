@@ -3,6 +3,8 @@ package com.spbstu.sneakerhunter.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,9 +21,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.spbstu.sneakerhunter.MainActivity;
 import com.spbstu.sneakerhunter.R;
 import com.spbstu.sneakerhunter.server_list.Sneaker;
 import com.spbstu.sneakerhunter.server_list.SneakersAPI;
@@ -85,13 +89,13 @@ public class SneakerItemFragment extends Fragment {
         }
     }
 
+
     private void getSneakerItemFromServer(View view) {
         SneakersAPI sneakersAPI = getClient().create(SneakersAPI.class);
         Call<Sneaker> sneakerCall = sneakersAPI.getSneakerById(sneaker_id);
         sneakerCall.enqueue(new Callback<Sneaker>() {
             @Override
             public void onResponse(Call<Sneaker> call, Response<Sneaker> response) {
-//                System.out.println(response.toString());
                 if (response.isSuccessful()) {
                     sneakerItem = response.body();
 

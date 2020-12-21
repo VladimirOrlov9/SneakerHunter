@@ -72,6 +72,11 @@ public class FiltersFragment extends Fragment {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                             android.R.layout.simple_spinner_dropdown_item, sizesStrings);
                     spinner.setAdapter(adapter);
+
+                    for (int i = 0; i < spinner.getCount(); i++) {
+                        if (spinner.getItemAtPosition(i).toString().equals(SearchFragment.SORT_SIZE))
+                            spinner.setSelection(i);
+                    }
                 }
             }
 
@@ -102,6 +107,11 @@ public class FiltersFragment extends Fragment {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                             android.R.layout.simple_spinner_dropdown_item, sizesStrings);
                     spinner.setAdapter(adapter);
+
+                    for (int i = 0; i < spinner.getCount(); i++) {
+                        if (spinner.getItemAtPosition(i).toString().equals(SearchFragment.SORT_BRAND))
+                            spinner.setSelection(i);
+                    }
                 }
             }
 
@@ -136,11 +146,17 @@ public class FiltersFragment extends Fragment {
         ArrayAdapter<String> adapterShop = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, new String[]{"Не выбрано", "Asos", "Ali Express"});
         shopSpin.setAdapter(adapterShop);
+        for (int i = 0; i < shopSpin.getCount(); i++) {
+            if (shopSpin.getItemAtPosition(i).toString().equals(SearchFragment.SORT_SHOP))
+                shopSpin.setSelection(i);
+        }
 
         Spinner sizeSpinner  = (Spinner) view.findViewById(R.id.sizeSpinner);
+
         EditText priceFromText = (EditText) view.findViewById(R.id.priceFromEditText);
         EditText priceToText = (EditText) view.findViewById(R.id.priceToEditText);
         Spinner brandSpinner = (Spinner) view.findViewById(R.id.brandsSpinner);
+
 
         Button confirmButton = (Button) view.findViewById(R.id.confirm_button);
         confirmButton.setOnClickListener(new View.OnClickListener() {

@@ -63,7 +63,6 @@ public class UserViewedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_viewed, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.history_recycler);
-
         adapter = new CaptionedImagesAdapter(elements);
         recyclerView.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
@@ -72,7 +71,11 @@ public class UserViewedFragment extends Fragment {
         adapter.setListener(new CaptionedImagesAdapter.Listener() {
             @Override
             public void onClick(int position) {
-
+                SneakerItemFragment nextFrag= new SneakerItemFragment(elements.get(position).getId());
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_login_container, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -95,6 +98,7 @@ public class UserViewedFragment extends Fragment {
 
 
     private void getSneakerItemFromServer(int[] sneaker_ids) {
+        elements.clear();
         SneakersAPI sneakersAPI = getClient().create(SneakersAPI.class);
         for (int i = 0; i < sneaker_ids.length; i++) {
             Call<Sneaker> sneakerCall = sneakersAPI.getSneakerById(sneaker_ids[i]);
@@ -116,8 +120,6 @@ public class UserViewedFragment extends Fragment {
 
         if (elements.size() > 0) {
             Collections.sort(elements);
-
-
         }
     }
 
@@ -144,5 +146,10 @@ public class UserViewedFragment extends Fragment {
             Toast toast = Toast.makeText(getContext(), ex.toString(), Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

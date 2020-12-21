@@ -21,7 +21,7 @@ public class LoginContainerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        LoginFragment nextFrag = new LoginFragment();
+        ProfileScreenFragment nextFrag = new ProfileScreenFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
                 .add(R.id.frame_login_container, nextFrag)
                 .commit();

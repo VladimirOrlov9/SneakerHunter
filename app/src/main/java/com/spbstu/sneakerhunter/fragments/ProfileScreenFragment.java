@@ -25,20 +25,7 @@ public class ProfileScreenFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_screen, container, false);
 
-        Button favoritesButton = (Button) view.findViewById(R.id.favorites_button);
         Button historyButton = (Button) view.findViewById(R.id.history_button);
-        Button exitButton = (Button) view.findViewById(R.id.exit_from_profile_button);
-
-        favoritesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FavoritesFragment nextFrag = new FavoritesFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_login_container, nextFrag, "profile_frag")
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
 
         historyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,14 +35,6 @@ public class ProfileScreenFragment extends Fragment {
                         .replace(R.id.frame_login_container, nextFrag, "profile_frag")
                         .addToBackStack(null)
                         .commit();
-            }
-        });
-
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((AppCompatActivity)getContext()).getSupportFragmentManager()
-                        .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
 
