@@ -45,6 +45,14 @@ public class GoodsModel implements Serializable {
     @Nullable
     private List<SizeModel> size;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable (name="goods_user",
+            joinColumns=@JoinColumn (name="goods_id"),
+            inverseJoinColumns=@JoinColumn(name="user_id"))
+    @JsonManagedReference
+    @Nullable
+    private List<UserModel> users;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
     @Nullable
@@ -63,17 +71,8 @@ public class GoodsModel implements Serializable {
     @NotNull
     private String uri;
 
-
-//    @NotNull
-//    private Integer quantity;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    @Nullable
-    private UserModel customer;
-
     public GoodsModel(ShopModel shop, String name, List<SizeModel> size, BrandModel brand, PictureModel picture,
-                      String money, String gender, String uri, UserModel customer) {
+                      String money, String gender, String uri, List<UserModel> users) {
         this.shop = shop;
         this.name = name;
         this.size = size;
@@ -82,8 +81,7 @@ public class GoodsModel implements Serializable {
         this.money = money;
         this.gender = gender;
         this.uri = uri;
-//        this.quantity = quantity;
-        this.customer = customer;
+        this.users = users;
     }
 
     public String getName() {
@@ -92,14 +90,6 @@ public class GoodsModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public UserModel getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(UserModel customer) {
-        this.customer = customer;
     }
 
     public String getUri() {

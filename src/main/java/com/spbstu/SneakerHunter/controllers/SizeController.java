@@ -21,7 +21,7 @@ public class SizeController {
         return sizeRepo.findAll();
     }
 
-    @GetMapping({"id"})
+    @GetMapping({"{id}"})
     public SizeModel getOne(@PathVariable("id") SizeModel size){
         return size;
     }
@@ -31,7 +31,7 @@ public class SizeController {
         return sizeRepo.save(size);
     }
 
-    @DeleteMapping({"id"})
+    @DeleteMapping({"{id}"})
     public void delete(@PathVariable("id") SizeModel size){
         sizeRepo.delete(size);
     }

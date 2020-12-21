@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-@Service
+//@Service
 @EnableScheduling
 public class AliApiDataLoader {
     private ShopRepo shopRepo;
@@ -102,10 +102,10 @@ public class AliApiDataLoader {
         String gender = sneaker.getProductElements().getTitle().getTitle();
         String lowerCaseGender = gender.toLowerCase(Locale.ROOT);
         if(lowerCaseGender.contains("woman") || lowerCaseGender.contains("female") || lowerCaseGender.contains("women")){
-            gender = "woman";
+            gender = "Women";
         }
         else if (lowerCaseGender.contains("men") || lowerCaseGender.contains("man") || lowerCaseGender.contains("male")){
-            gender = "man";
+            gender = "Men";
         }
         else
             gender = "not specified";
@@ -113,6 +113,8 @@ public class AliApiDataLoader {
         String imageUrl = "";
         if (!sneaker.getProductElements().getImage().getImgUrl().isEmpty())
             imageUrl = sneaker.getProductElements().getImage().getImgUrl();
+        if(imageUrl.contains("http:"))
+            imageUrl = imageUrl.substring(imageUrl.indexOf("//"));
 
         PictureModel picture = pictureRepo.findByUrl(imageUrl);
         if (picture == null) {
@@ -130,7 +132,7 @@ public class AliApiDataLoader {
         price = price.substring(price.indexOf(" "));
 
         GoodsModel goods = new GoodsModel(shop, sneaker.getProductElements().getTitle().getTitle(), null, null,
-                picture, price, gender, sneaker.getAction(), null);
+                picture, price, gender, "https:" + sneaker.getAction(), null);
         goodsList.add(goods);
         return goodsList;
     }

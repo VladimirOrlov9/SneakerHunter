@@ -1,27 +1,30 @@
 package com.spbstu.SneakerHunter.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sun.istack.NotNull;
+import com.sun.istack.Nullable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table
-@ToString(of = {"id", "name", "email", "gender"})
-@EqualsAndHashCode(of = {"id"})
 @Data
 public class UserModel {
     @Id
     private String id;
-    private String name;
-    private String userpic;
     private String email;
-    private String gender;
     private LocalDateTime lastVisit;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable (name="goods_user",
+            joinColumns=@JoinColumn (name="user_id"),
+            inverseJoinColumns=@JoinColumn(name="goods_id"))
+    @JsonBackReference
+    @Nullable
+    private List<GoodsModel> goods;
 }

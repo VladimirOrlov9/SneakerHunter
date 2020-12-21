@@ -22,7 +22,7 @@ import java.util.List;
 200005276
 
  */
-@Service
+//@Service
 @EnableScheduling
 public class AsosApiDataLoader {
     private ShopRepo shopRepo;
