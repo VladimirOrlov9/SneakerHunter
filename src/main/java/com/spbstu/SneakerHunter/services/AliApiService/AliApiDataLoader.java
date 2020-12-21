@@ -15,8 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-//@Service
-@EnableScheduling
+@Service
+//@EnableScheduling
 public class AliApiDataLoader {
     private ShopRepo shopRepo;
     private PictureRepo pictureRepo;
@@ -88,7 +88,7 @@ public class AliApiDataLoader {
 
     }
 
-    @Scheduled(fixedDelay = 1_000_000)
+    //@Scheduled(fixedDelay = 1_000_000)
     public void loadData() {
 
         for (int offset = 0; offset <= 100; offset += 20)

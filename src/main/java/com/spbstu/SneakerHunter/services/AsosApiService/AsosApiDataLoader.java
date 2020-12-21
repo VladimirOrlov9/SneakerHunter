@@ -12,18 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-/*
-100001606
-200002155
-100001615
-200002136
-200002164
-200002253
-200005276
 
- */
-//@Service
-@EnableScheduling
+@Service
+//@EnableScheduling
 public class AsosApiDataLoader {
     private ShopRepo shopRepo;
     private SizeRepo sizeRepo;
@@ -140,7 +131,7 @@ public class AsosApiDataLoader {
         return sneakers;
     }
 
-    @Scheduled(fixedDelay = 1_000_000)
+    //@Scheduled(fixedDelay = 1_000_000)
     public void loadData() {
 
         for (int offset = 0; offset <= 100; offset += 50)

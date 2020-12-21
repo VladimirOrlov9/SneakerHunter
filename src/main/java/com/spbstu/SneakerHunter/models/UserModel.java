@@ -1,14 +1,10 @@
 package com.spbstu.SneakerHunter.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,6 +25,10 @@ public class UserModel {
     public UserModel(String id, List<GoodsModel> goods) {
         this.id = id;
         this.goods = goods;
+    }
+
+    public UserModel() {
+
     }
 
     public String getId() {
