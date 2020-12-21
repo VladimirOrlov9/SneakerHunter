@@ -3,7 +3,7 @@ package com.spbstu.sneakerhunter.server_list;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Brand {
+public class Brand implements Comparable<Brand> {
 
     @SerializedName("id")
     @Expose
@@ -28,4 +28,8 @@ public class Brand {
         this.name = name;
     }
 
+    @Override
+    public int compareTo(Brand o) {
+        return this.getName().compareTo(o.getName());
+    }
 }

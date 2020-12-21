@@ -18,12 +18,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ToggleButton;
+import android.widget.Spinner;
 
-import com.spbstu.sneakerhunter.SneakerItemFragment;
 import com.spbstu.sneakerhunter.adapters.CaptionedImagesAdapter;
 import com.spbstu.sneakerhunter.HistoryDatabaseHelper;
 import com.spbstu.sneakerhunter.R;
@@ -34,7 +33,6 @@ import com.spbstu.sneakerhunter.server_list.Sneaker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -45,22 +43,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchFragment extends Fragment {
 
-    public static int SORT_PRICE_FROM = 0;
-    public static int SORT_PRICE_TO = 0;
-    public static String SORT_SIZE = "";
-    public static String SORT_BRAND = "";
-    public static String SORT_COLOR = "";
+    public static double SORT_PRICE_FROM = 0;
+    public static double SORT_PRICE_TO = 0;
+    public static String SORT_SIZE = "Не выбрано";
+    public static String SORT_SHOP = "Не выбрано";
+    public static String SORT_BRAND = "Не выбрано";
     public static boolean IS_SORT_PRICE = false;
     public static boolean IS_SORT_SIZE = false;
+    public static boolean IS_SORT_SHOP = false;
     public static boolean IS_SORT_BRAND = false;
-    public static boolean IS_SORT_COLOR = false;
 
     private RecyclerView recyclerView;
+    private CaptionedImagesAdapter adapter;
     private Retrofit retrofit;
 
     private final String gender;
     private int toggleButtonState = 0; //0 - desc, 1 - asc
     private List<Sneaker> elements = new ArrayList<>();
+    private List<Sneaker> newElements = new ArrayList<>();
 
 
     SearchFragment(String genderId) {
@@ -102,7 +102,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -110,8 +109,38 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.search_recycler);
         parseJSONsFromServer();
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.search_recycler);
+        adapter = new CaptionedImagesAdapter(elements);
+        recyclerView.setAdapter(adapter);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter.setListener(new CaptionedImagesAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                ContentValues shoeValues = new ContentValues();
+                shoeValues.put("SNEAKER_KEY", adapter.getList().get(position).getId());
+
+                SQLiteOpenHelper historyDatabaseHelper = new HistoryDatabaseHelper(getContext());
+                try {
+                    SQLiteDatabase db =  historyDatabaseHelper.getWritableDatabase();
+
+                    db.insertOrThrow("HISTORY", null, shoeValues);
+                    db.close();
+                } catch(SQLiteException e) {
+                    System.out.println("This item already in the history list, nothing added.");
+                }
+
+                SneakerItemFragment nextFrag= new SneakerItemFragment(adapter.getList().get(position).getId());
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_container, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -124,30 +153,35 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        ToggleButton sortToggleButton = (ToggleButton) view.findViewById(R.id.sort_toggle_button);
+        Spinner sortSpinner = (Spinner) view.findViewById(R.id.sort_spinner);
 
         EditText editTextSearch = (EditText) view.findViewById(R.id.query_edit_text);
 
-        sortToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String text = editTextSearch.getText().toString();
 
                 if (text.equals("")) {
-                    if (isChecked) {
+                    if (position == 1) {
                         toggleButtonState = 0;
                     } else {
                         toggleButtonState = 1;
                     }
                     updateRecycleView();
                 } else {
-                    if (isChecked) {
+                    if (position == 2) {
                         toggleButtonState = 0;
                     } else {
                         toggleButtonState = 1;
                     }
                     updateRecycleView(text);
                 }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -162,9 +196,7 @@ public class SearchFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 String text = editTextSearch.getText().toString();
 
-                if (text.equals("")) {
-                    updateRecycleView();
-                } else {
+                if (!text.equals("")) {
                     updateRecycleView(text);
                 }
             }
@@ -181,15 +213,12 @@ public class SearchFragment extends Fragment {
                         .commit();
             }
         });
-
-
         return view;
     }
 
 
     private void updateRecycleView(final String searchRequest) {
-
-        List<Sneaker> newElements = elements
+        newElements = elements
                 .stream()
                 .filter(value -> value.getName().toLowerCase().contains(searchRequest.toLowerCase())
                         && (value.getGender().equals(gender)))
@@ -214,22 +243,23 @@ public class SearchFragment extends Fragment {
                     }
                 })
                 .filter(c -> {
-                    if (IS_SORT_BRAND) {
-                        return (SORT_BRAND.equals(c.getBrand().getName()));
+                    if (IS_SORT_SHOP) {
+                        return (SORT_SHOP.equals(c.getShop().getTitle()));
                     } else {
                         return true;
                     }
                 })
-//                .filter(c -> {
-//                    if (IS_SORT_COLOR) {
-//                        return (SORT_COLOR.equals(c.getColor()));
-//                    } else {
-//                        return false;
-//                    }
-//                })
+                .filter(c -> {
+                    if (IS_SORT_BRAND ) {
+                        if (c.getBrand() != null)
+                            return (SORT_BRAND.equals(c.getBrand().getName()));
+                        else return false;
+                    } else{
+                        return true;
+                    }
+                })
                 .collect(Collectors.toList());
 
-        if (newElements.size() > 0) {
             switch (toggleButtonState) {
                 case 0:
                     //desc sort
@@ -243,31 +273,12 @@ public class SearchFragment extends Fragment {
                     break;
             }
 
-            CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(newElements);
-            recyclerView.setAdapter(adapter);
-            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-            recyclerView.setLayoutManager(layoutManager);
-
-            adapter.setListener(new CaptionedImagesAdapter.Listener() {
-                @Override
-                public void onClick(int position) {
-                    SneakerItemFragment nextFrag= new SneakerItemFragment(newElements.get(position).getId());
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frame_container, nextFrag, "findThisFragment")
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
-        } else {
-            CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(new ArrayList<Sneaker>());
-            recyclerView.setAdapter(adapter);
-            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-            recyclerView.setLayoutManager(layoutManager);
-        }
+        adapter.setNewList(newElements);
     }
 
     private void updateRecycleView() {
-        List<Sneaker> newElements = elements
+
+        newElements = elements
                 .stream()
                 .filter(value -> (value.getGender().equals(gender)))
                 .filter(c -> {
@@ -291,19 +302,21 @@ public class SearchFragment extends Fragment {
                     }
                 })
                 .filter(c -> {
-                    if (IS_SORT_BRAND) {
-                        return (SORT_BRAND.equals(c.getBrand().getName()));
+                    if (IS_SORT_SHOP) {
+                        return (SORT_SHOP.equals(c.getShop().getTitle()));
                     } else {
                         return true;
                     }
                 })
-//                .filter(c -> {
-//                    if (IS_SORT_COLOR) {
-//                        return (SORT_COLOR.equals(c.getColor()));
-//                    } else {
-//                        return false;
-//                    }
-//                })
+                .filter(c -> {
+                    if (IS_SORT_BRAND) {
+                        if (c.getBrand() != null)
+                            return (SORT_BRAND.equals(c.getBrand().getName()));
+                        else return false;
+                    } else {
+                        return true;
+                    }
+                })
                 .collect(Collectors.toList());
 
         switch (toggleButtonState) {
@@ -319,34 +332,7 @@ public class SearchFragment extends Fragment {
                 break;
         }
 
-        CaptionedImagesAdapter adapter = new CaptionedImagesAdapter(newElements);
-        recyclerView.setAdapter(adapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter.setListener(new CaptionedImagesAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
-//                ContentValues shoeValues = new ContentValues();
-//                shoeValues.put("SNEAKER_KEY", elements.get(position).getId());
-//
-//                SQLiteOpenHelper historyDatabaseHelper = new HistoryDatabaseHelper(getContext());
-//                try {
-//                    SQLiteDatabase db =  historyDatabaseHelper.getWritableDatabase();
-//
-//                    db.insertOrThrow("HISTORY", null, shoeValues);
-//                    db.close();
-//                } catch(SQLiteException e) {
-//                    System.out.println("This item already in the history list, nothing added.");
-//                }
-
-                SneakerItemFragment nextFrag= new SneakerItemFragment(newElements.get(position).getId());
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, nextFrag, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
+        adapter.setNewList(newElements);
     }
 
     @Override
@@ -357,8 +343,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        updateRecycleView();
     }
 
     @Override

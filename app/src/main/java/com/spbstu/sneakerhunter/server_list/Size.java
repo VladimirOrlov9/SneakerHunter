@@ -30,9 +30,12 @@ public class Size implements Comparable<Size> {
 
     @Override
     public int compareTo(Size o) {
-        int size1 = Integer.parseInt(this.getSize().substring(3));
-        int size2 = Integer.parseInt(o.getSize().substring(3));
-        return size1 - size2;
+        double size1 = Double.parseDouble(this.getSize().substring(3));
+        double size2 = Double.parseDouble(o.getSize().substring(3));
+
+        if (size1 < size2) return -1;
+        if (size1 > size2) return 1;
+        return 0;
     }
 
 }

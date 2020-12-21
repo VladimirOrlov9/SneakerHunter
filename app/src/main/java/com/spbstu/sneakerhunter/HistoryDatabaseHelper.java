@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class HistoryDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_MAME = "SneakerHunterHistory";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public HistoryDatabaseHelper(Context context){
         super(context, DB_MAME, null, DB_VERSION);
@@ -14,7 +14,7 @@ public class HistoryDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        updateMyDatabase(db, 0, DB_VERSION);
+        updateMyDatabase(db, 2, DB_VERSION);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class HistoryDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void updateMyDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
+        if (oldVersion < 4) {
             db.execSQL("DROP TABLE HISTORY;");
             db.execSQL("CREATE TABLE HISTORY (" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT," +

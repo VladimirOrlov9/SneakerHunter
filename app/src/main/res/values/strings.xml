@@ -3,9 +3,6 @@
     <string name="search">Поиск</string>
     <string name="favorites">Избранное</string>
     <string name="account">Аккаунт</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">male</string>
-    <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -30,8 +27,16 @@
     <string name="from_string">От</string>
     <string name="to_string">До</string>
     <string name="size_string">Размер</string>
-    <string name="brand_string">Бренд</string>
+    <string name="brand_string">Магазин</string>
     <string name="color_string">Цвет</string>
     <string name="accept_string">Применить</string>
+    <string name="reset_string">Сбросить</string>
+    <string name="brands_string">Бренд</string>
+
+    <string-array name="srt_array">
+        <item>По убыванию</item>
+        <item>По возрастанию</item>
+    </string-array>
 
 </resources>
+

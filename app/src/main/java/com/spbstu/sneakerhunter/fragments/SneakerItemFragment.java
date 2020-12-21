@@ -1,36 +1,33 @@
-package com.spbstu.sneakerhunter;
+package com.spbstu.sneakerhunter.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.spbstu.sneakerhunter.adapters.CaptionedImagesAdapter;
-import com.spbstu.sneakerhunter.server_list.Size;
+import com.spbstu.sneakerhunter.R;
 import com.spbstu.sneakerhunter.server_list.Sneaker;
 import com.spbstu.sneakerhunter.server_list.SneakersAPI;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,6 +113,8 @@ public class SneakerItemFragment extends Fragment {
                     sizeTextView.setText(Arrays.toString(sizesArray));
 
                     Button shopURLButton = (Button) view.findViewById(R.id.sneaker_snopurl_button);
+                    shopURLButton.setText(sneakerItem.getShop().getTitle());
+
                     shopURLButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

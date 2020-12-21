@@ -36,6 +36,15 @@ public class CaptionedImagesAdapter extends RecyclerView.Adapter<CaptionedImages
         }
     }
 
+    public void setNewList(List<Sneaker> list){
+        this.elements = list;
+        notifyDataSetChanged();
+    }
+
+    public List<Sneaker> getList(){
+        return elements;
+    }
+
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 

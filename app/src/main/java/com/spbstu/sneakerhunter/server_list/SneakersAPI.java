@@ -15,6 +15,9 @@ public interface SneakersAPI {
     @GET("size")
     Call<List<Size>> getSizes();
 
+    @GET("brand")
+    Call<List<Brand>> getBrands();
+
     @GET("sneakers/{id}")
     Call<Sneaker> getSneakerById(@Path("id") int id);
 }

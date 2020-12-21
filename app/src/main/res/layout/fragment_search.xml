@@ -49,14 +49,13 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <ToggleButton
-                android:id="@+id/sort_toggle_button"
+            <Spinner
+                android:id="@+id/sort_spinner"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:checked="true"
                 android:layout_height="wrap_content"
-                android:textOff="@string/descending_str"
-                android:textOn="@string/ascending_str"
+                android:entries="@array/srt_array"
                 android:paddingEnd="16dp"
                 android:paddingStart="16dp"/>
 

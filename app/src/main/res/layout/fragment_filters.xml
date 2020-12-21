@@ -91,10 +91,10 @@
                 android:layout_width="100dp"
                 android:textSize="20sp"
                 android:layout_height="40dp"
-                android:text="@string/brand_string"/>
+                android:text="@string/brands_string"/>
 
             <Spinner
-                android:id="@+id/brandSpinner"
+                android:id="@+id/brandsSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:spinnerMode="dropdown">
@@ -111,15 +111,21 @@
                 android:layout_width="100dp"
                 android:textSize="20sp"
                 android:layout_height="40dp"
-                android:text="@string/color_string"/>
+                android:text="@string/brand_string"/>
 
             <Spinner
-                android:id="@+id/colorSpinner"
+                android:id="@+id/brandSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:spinnerMode="dropdown">
             </Spinner>
         </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/reset_button"
+            android:text="@string/reset_string"/>
 
         <Button
             android:layout_width="match_parent"

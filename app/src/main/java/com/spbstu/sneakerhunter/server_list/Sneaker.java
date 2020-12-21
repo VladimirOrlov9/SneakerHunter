@@ -9,9 +9,9 @@ public class Sneaker implements Comparable<Sneaker> {
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("category")
+    @SerializedName("shop")
     @Expose
-    private Category category;
+    private Shop shop;
     @SerializedName("name")
     @Expose
     private String name;
@@ -45,12 +45,12 @@ public class Sneaker implements Comparable<Sneaker> {
         this.id = id;
     }
 
-    public Category getCategory() {
-        return category;
+    public Shop getShop() {
+        return shop;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 
     public String getName() {
@@ -89,10 +89,6 @@ public class Sneaker implements Comparable<Sneaker> {
         return money;
     }
 
-    public int getDoubleMoney() {
-        return (int)Math.round(Double.parseDouble(money.substring(1)));
-    }
-
     public void setMoney(String money) {
         this.money = money;
     }
@@ -123,8 +119,16 @@ public class Sneaker implements Comparable<Sneaker> {
 
     @Override
     public int compareTo(Sneaker o) {
-        int price1 = (int) Math.round(Double.parseDouble(this.getMoney().substring(1)));
-        int price2 =(int) Math.round(Double.parseDouble(o.getMoney().substring(1)));
-        return price1 - price2;
+        double size1 = Double.parseDouble(this.money.substring(this.money.indexOf("$")).replaceAll("[^0-9.]", ""));
+        double size2 = Double.parseDouble(o.getMoney().substring(o.getMoney().indexOf("$")).replaceAll("[^0-9.]", ""));
+
+        if (size1 < size2) return -1;
+        if (size1 > size2) return 1;
+        return 0;
+    }
+
+    public double getDoubleMoney() {
+        String data = this.money.substring(money.indexOf("$")).replaceAll("[^0-9.]", "");
+        return Double.parseDouble(data);
     }
 }
