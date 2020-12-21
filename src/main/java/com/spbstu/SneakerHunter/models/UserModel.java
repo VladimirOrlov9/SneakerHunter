@@ -17,8 +17,6 @@ import java.util.List;
 public class UserModel {
     @Id
     private String id;
-    @Column(unique = true)
-    private String email;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable (name="goods_user",
@@ -27,4 +25,25 @@ public class UserModel {
     @JsonBackReference
     @Nullable
     private List<GoodsModel> goods;
+
+    public UserModel(String id, List<GoodsModel> goods) {
+        this.id = id;
+        this.goods = goods;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<GoodsModel> getGoods() {
+        return goods;
+    }
+
+    public void setGoods(List<GoodsModel> goods) {
+        this.goods = goods;
+    }
 }
