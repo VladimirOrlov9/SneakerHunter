@@ -21,61 +21,74 @@
             app:layout_scrollFlags="scroll|enterAlways"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginHorizontal="14dp"
         android:layout_marginTop="?attr/actionBarSize">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:id="@+id/sneaker_image_view"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="14dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="8dp">
-            
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="14dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:id="@+id/sneaker_image_view"
+                android:scaleType="centerCrop"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="8"
+                    android:id="@+id/sneaker_name"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_height="match_parent"/>
+
+                <ImageButton
+                    android:src="@drawable/baseline_favorite_24"
+                    android:id="@+id/add_to_favorites_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"/>
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
-                android:id="@+id/sneaker_name"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_height="match_parent"/>
-            
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:id="@+id/sneaker_price_text"
+                android:layout_marginHorizontal="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="1dp"
+                android:id="@+id/sneaker_sizes_text"
+                android:layout_marginHorizontal="8dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="8dp"
+                android:textSize="20sp"
+                android:background="#FFFFFF"
+                android:id="@+id/sneaker_snopurl_button"
+                android:layout_marginHorizontal="8dp">
+
+            </Button>
+
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:id="@+id/sneaker_price_text"
-            android:layout_marginHorizontal="8dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginTop="1dp"
-            android:id="@+id/sneaker_sizes_text"
-            android:layout_marginHorizontal="8dp"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp"
-            android:background="#FFFFFF"
-            android:id="@+id/sneaker_snopurl_button"
-            android:layout_marginHorizontal="8dp">
-
-        </Button>
-
-    </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SneakerHunter</string>
+
     <string name="search">Поиск</string>
     <string name="favorites">Избранное</string>
     <string name="account">Аккаунт</string>
@@ -32,11 +33,10 @@
     <string name="accept_string">Применить</string>
     <string name="reset_string">Сбросить</string>
     <string name="brands_string">Бренд</string>
+    <string name="favorites_string">Избранное</string>
 
     <string-array name="srt_array">
         <item>По убыванию</item>
         <item>По возрастанию</item>
     </string-array>
-
 </resources>
-
