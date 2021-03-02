@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "SneakerHunter"
+rootProject.name = "SneakerHunter Kotlin"
