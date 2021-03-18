@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-@Service
+//@Service
 //@EnableScheduling
 public class AliApiDataLoader {
     private ShopRepo shopRepo;
@@ -132,7 +132,7 @@ public class AliApiDataLoader {
         price = price.substring(price.indexOf(" "));
 
         GoodsModel goods = new GoodsModel(shop, sneaker.getProductElements().getTitle().getTitle(), null, null,
-                picture, price, gender, "https:" + sneaker.getAction(), null);
+                picture, price, gender, "https:" + sneaker.getAction());
         goodsList.add(goods);
         return goodsList;
     }

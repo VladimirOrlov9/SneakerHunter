@@ -30,6 +30,11 @@ public class PictureModel {
         this.url = url;
     }
 
+    public PictureModel(Long id, String url) {
+        this.id = id;
+        this.url = url;
+    }
+
     public Long getId() {
         return id;
     }

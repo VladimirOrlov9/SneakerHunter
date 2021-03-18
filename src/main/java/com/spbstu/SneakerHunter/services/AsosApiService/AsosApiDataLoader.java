@@ -178,7 +178,7 @@ public class AsosApiDataLoader {
 
         GoodsModel goods = new GoodsModel(shop, sneaker.getName(), sizes, brand, picture,
                 sneaker.getVariants().get(0).getPrice().getCurrent().getText(), sneaker.getGender(),
-                sneaker.getBaseUrl().toString() + "/" + url, null);
+                sneaker.getBaseUrl().toString() + "/" + url);
         goodsList.add(goods);
         return goodsList;
     }
