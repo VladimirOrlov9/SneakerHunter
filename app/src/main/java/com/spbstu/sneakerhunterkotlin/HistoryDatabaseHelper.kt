@@ -11,6 +11,7 @@ class HistoryDatabaseHelper(context: Context?) :
         null,
         DB_VERSION
     ) {
+
     override fun onCreate(db: SQLiteDatabase) {
         updateMyDatabase(db, 7, DB_VERSION)
     }

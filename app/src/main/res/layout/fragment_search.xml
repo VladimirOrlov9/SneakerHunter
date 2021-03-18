@@ -7,92 +7,86 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SearchFragment">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical">-->
-        <com.google.android.material.appbar.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Widget.AppCompat.ActionBar.Solid">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Widget.AppCompat.ActionBar.Solid">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_scrollFlags="scroll|enterAlways" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="8dp"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/query_edit_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="10dp"
-                        android:background="@null"
-                        android:maxLines="1"
-                        android:imeOptions="actionSearch"
-                        android:inputType="text"
-                        android:hint="@string/enter_req"
-                        android:autofillHints="" />
-
-                </LinearLayout>
-            </androidx.appcompat.widget.Toolbar>
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_scrollFlags="scroll|enterAlways" >
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways">
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@+id/sort_spinner"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/srt_array"
-                    android:paddingEnd="16dp"
-                    android:paddingStart="16dp"/>
-
-                <Button
+                <EditText
+                    android:id="@+id/query_edit_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/filter_button"
                     android:layout_weight="1"
-                    android:paddingEnd="16dp"
-                    android:paddingStart="16dp"
-                    android:text="@string/filters_str"/>
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:maxLines="1"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:hint="@string/enter_req"
+                    android:autofillHints="" />
+
             </LinearLayout>
-        </com.google.android.material.appbar.AppBarLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swiperefresh"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-            <androidx.core.widget.NestedScrollView
+            <Spinner
+                android:id="@+id/sort_spinner"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:checked="true"
+                android:layout_height="wrap_content"
+                android:entries="@array/srt_array"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/filter_button"
+                android:layout_weight="1"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:text="@string/filters_str"/>
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:id="@+id/search_recycler"
+                android:scrollbars="vertical"/>
+        </androidx.core.widget.NestedScrollView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/search_recycler"
-                    android:scrollbars="vertical"/>
-            </androidx.core.widget.NestedScrollView>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-<!--    </LinearLayout>-->
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
