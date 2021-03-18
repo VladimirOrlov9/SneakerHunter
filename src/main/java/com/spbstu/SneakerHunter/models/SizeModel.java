@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sun.istack.NotNull;
+import com.sun.istack.Nullable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,15 +31,20 @@ public class SizeModel {
     @JoinTable (name="goods_size",
             joinColumns=@JoinColumn (name="size_id"),
             inverseJoinColumns=@JoinColumn(name="goods_id"))
-    @JsonBackReference
+    //@JsonBackReference
+    @Nullable
     private List<GoodsModel> goods;
 
     public SizeModel(String size) {
         this.size = size;
     }
 
-    public SizeModel() {
+    public SizeModel(Long id, String size) {
+        this.id = id;
+        this.size = size;
+    }
 
+    public SizeModel() {
     }
 
     public String getSize() {
