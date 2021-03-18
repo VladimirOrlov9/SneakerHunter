@@ -2,8 +2,6 @@ package com.spbstu.sneakerhunterkotlin.adapters
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.AsyncTask
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +19,6 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
 
 
 class FavoritesCardAdapter(elementsParam: Map<Int, Sneaker>) :
@@ -47,11 +44,6 @@ class FavoritesCardAdapter(elementsParam: Map<Int, Sneaker>) :
         }
         return bitmap
     }
-
-//    fun setNewList(list: List<Sneaker>) {
-//        elements = list.toMutableList()
-//        notifyDataSetChanged()
-//    }
 
     private fun executeLoadingImage(urlStr: String?, imageView: ImageView) {
         if (urlStr != null) {

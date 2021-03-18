@@ -34,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.stream.Collectors
 
-class SearchFragment internal constructor(private val gender: String) : Fragment() {
+open class SearchFragment internal constructor(private val gender: String) : Fragment() {
     private var recyclerView: RecyclerView? = null
     private var adapter: SearchCardAdapter? = null
     private var retrofit: Retrofit? = null
@@ -182,8 +182,8 @@ class SearchFragment internal constructor(private val gender: String) : Fragment
         return view
     }
 
-    private fun updateRecycleView(searchRequest: String) {
-        newElements = elements
+    fun filterListWithStringParameter (list: List<Sneaker>, searchRequest: String) : List<Sneaker> {
+        val newElement = list
             .stream()
             .filter { value: Sneaker ->
                 (value.name!!.toLowerCase(Locale.ROOT).contains(searchRequest.toLowerCase(Locale.ROOT))
@@ -225,6 +225,7 @@ class SearchFragment internal constructor(private val gender: String) : Fragment
                 }
             }
             .collect(Collectors.toList())
+
         when (toggleButtonState) {
             0 ->                     //desc sort
                 (newElements as MutableList<Sneaker>).sort()
@@ -233,11 +234,17 @@ class SearchFragment internal constructor(private val gender: String) : Fragment
             else -> {
             }
         }
+
+        return newElement
+    }
+
+    private fun updateRecycleView(searchRequest: String) {
+        newElements = filterListWithStringParameter(elements, searchRequest)
         adapter?.setNewList(newElements)
     }
 
-    private fun updateRecycleView() {
-        newElements = elements
+    fun filterListWithEmptyString (list: List<Sneaker>) : List<Sneaker> {
+        val newElements = list
             .stream()
             .filter { value: Sneaker ->
                 value.gender.equals(gender)
@@ -286,19 +293,13 @@ class SearchFragment internal constructor(private val gender: String) : Fragment
             else -> {
             }
         }
+
+        return newElements
+    }
+
+    private fun updateRecycleView() {
+        newElements = filterListWithEmptyString(elements)
         adapter?.setNewList(newElements)
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
     }
 
     companion object {
