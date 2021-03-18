@@ -1,14 +1,24 @@
 package com.spbstu.sneakerhunterkotlin
 
+import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
+import android.os.Build
+import androidx.test.core.app.ApplicationProvider
 import com.google.gson.Gson
 import com.spbstu.sneakerhunterkotlin.adapters.FavoritesCardAdapter
 import com.spbstu.sneakerhunterkotlin.adapters.SearchCardAdapter
 import com.spbstu.sneakerhunterkotlin.fragments.SearchFragment
 import com.spbstu.sneakerhunterkotlin.server_list.Sneaker
 import com.spbstu.sneakerhunterkotlin.server_list.SneakersAPI
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.Robolectric
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+
 class AdaptersTest {
     val gson = Gson()
     val list: List<Sneaker> = listOf(gson.fromJson("""{"id":3,"shop":{"id":2,"title":"Ali Express","url":"en-aliexpress.com"},"name":"Men
@@ -305,4 +315,124 @@ class SearchFragmentTest {
         assertEquals(1, searchFragment.filterListWithStringParameter(list, "nike").size)
     }
 
+}
+
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
+class HistoryDatabaseHelperTest {
+    lateinit var helper: HistoryDatabaseHelper
+
+    @Before
+    fun setUp() {
+        helper = HistoryDatabaseHelper(ApplicationProvider.getApplicationContext());
+    }
+
+    @After
+    fun tearDown()
+    {
+        helper.close();
+    }
+
+    private fun assertDatabaseOpened(database: SQLiteDatabase) {
+        assert(database.isOpen)
+    }
+
+    private fun assertInitialDB(database: SQLiteDatabase, helper: HistoryDatabaseHelper) {
+        assertDatabaseOpened(database)
+        assert(helper.databaseName.equals("SneakerHunterHistory"))
+    }
+
+    @Test
+    fun testInitialGetReadableDatabase() {
+        val database = helper.readableDatabase
+        assertInitialDB(database, helper)
+        database.close()
+    }
+
+    @Test
+    fun testAddingNewElementToHistory() {
+        val database = helper.writableDatabase
+
+        val shoeValues = ContentValues()
+        shoeValues.put("SNEAKER_KEY", 101)
+
+        database.insertOrThrow("HISTORY", null, shoeValues)
+
+        val cursor = database.query(
+                "HISTORY", arrayOf("_id", "SNEAKER_KEY"), null,
+                null, null, null, "_id DESC"
+        )
+
+        cursor.moveToNext()
+        assertEquals(101, cursor.getInt(1))
+
+        database.close()
+    }
+
+    @Test
+    fun testAddingNewElementToFavorites() {
+        val database = helper.writableDatabase
+
+        val shoeValues = ContentValues()
+        shoeValues.put("SNEAKER_KEY", 101)
+
+        database.insertOrThrow("FAVORITES", null, shoeValues)
+
+        val cursor = database.query(
+                "FAVORITES", arrayOf("_id", "SNEAKER_KEY"), null,
+                null, null, null, "_id DESC"
+        )
+
+        cursor.moveToNext()
+        assertEquals(101, cursor.getInt(1))
+
+        database.close()
+    }
+
+    @Test
+    fun testOverflowingHistoryDatabase() {
+        val database = helper.writableDatabase
+
+        val shoesValues = arrayListOf<ContentValues>()
+        for (i in 0..23) {
+            val shoeValues = ContentValues()
+            shoeValues.put("SNEAKER_KEY", i)
+
+            shoesValues.add(shoeValues)
+        }
+
+        for (i in shoesValues.indices) {
+            database.insertOrThrow("HISTORY", null, shoesValues[i])
+        }
+
+        val cursor = database.query(
+                "HISTORY", arrayOf("_id", "SNEAKER_KEY"), null,
+                null, null, null, "_id DESC"
+        )
+
+        assertEquals(20, cursor.count)
+
+        database.close()
+    }
+}
+
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
+class MainActivityTest {
+    lateinit var activity: MainActivity
+
+    @Before
+    fun setUp() {
+        activity = Robolectric.buildActivity(MainActivity::class.java)
+                .create()
+                .start()
+                .pause()
+                .resume()
+                .get()
+    }
+
+    @Test
+    fun testMainActivityInit() {
+        assertNotNull(activity.applicationContext)
+    }
 }
