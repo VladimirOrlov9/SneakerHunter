@@ -41,25 +41,15 @@ class Sneaker : Comparable<Sneaker?> {
     @Expose
     var uri: String? = null
 
-    @SerializedName("customer")
-    @Expose
-    var customer: Any? = null
-
     val doubleMoney: Double
         get() {
-            val data =
-                money!!.substring(money!!.indexOf("$")).replace("[^0-9.]".toRegex(), "")
+            val data = money!!.substring(money!!.indexOf("$")).replace("[^0-9.]".toRegex(), "")
             return data.toDouble()
         }
 
     override fun compareTo(other: Sneaker?): Int {
-        val size1 =
-            money!!.substring(money!!.indexOf("$")).replace("[^0-9.]".toRegex(), "")
-                .toDouble()
-        val size2 =
-            other?.money!!.substring(other.money!!.indexOf("$")).replace("[^0-9.]".toRegex(), "")
-                .toDouble()
-        if (size1 < size2) return -1
-        return if (size1 > size2) 1 else 0
+        val size1 = this.doubleMoney
+        val size2 = other!!.doubleMoney
+        return size1.compareTo(size2)
     }
 }
