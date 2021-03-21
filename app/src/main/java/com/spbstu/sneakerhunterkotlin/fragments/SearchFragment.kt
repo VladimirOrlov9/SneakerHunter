@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.spbstu.sneakerhunterkotlin.FiltersLogic
 import com.spbstu.sneakerhunterkotlin.HistoryDatabaseHelper
 import com.spbstu.sneakerhunterkotlin.R
 import com.spbstu.sneakerhunterkotlin.adapters.SearchCardAdapter
@@ -41,6 +42,7 @@ open class SearchFragment internal constructor(private val gender: String) : Fra
     private var toggleButtonState = 0 //0 - desc, 1 - asc
     private var elements: List<Sneaker> = ArrayList<Sneaker>()
     private var newElements: List<Sneaker> = ArrayList<Sneaker>()
+    private val filtersLogic = FiltersLogic(gender)
     private val client: Retrofit
         get() {
             if (retrofit == null) {
@@ -182,123 +184,13 @@ open class SearchFragment internal constructor(private val gender: String) : Fra
         return view
     }
 
-    fun filterListWithStringParameter (list: List<Sneaker>, searchRequest: String) : List<Sneaker> {
-        val newElement = list
-            .stream()
-            .filter { value: Sneaker ->
-                (value.name!!.toLowerCase(Locale.ROOT).contains(searchRequest.toLowerCase(Locale.ROOT))
-                        && value.gender.equals(gender))
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_PRICE) {
-                    return@filter (SORT_PRICE_FROM <= c.doubleMoney) && (c.doubleMoney <= SORT_PRICE_TO)
-                } else {
-                    return@filter true
-                }
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_SIZE) {
-                    val sizes: List<Size>? = c.size
-                    for (size in sizes!!) {
-                        if (size.size.equals(SORT_SIZE)) {
-                            return@filter true
-                        }
-                    }
-                    return@filter false
-                } else {
-                    return@filter true
-                }
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_SHOP) {
-                    return@filter SORT_SHOP == c.shop?.title
-                } else {
-                    return@filter true
-                }
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_BRAND) {
-                    if (c.brand != null) return@filter SORT_BRAND == c.brand
-                        ?.name else return@filter false
-                } else {
-                    return@filter true
-                }
-            }
-            .collect(Collectors.toList())
-
-        when (toggleButtonState) {
-            0 ->                     //desc sort
-                (newElements as MutableList<Sneaker>).sort()
-            1 ->                     //asc sort
-                (newElements as MutableList<Sneaker>).sortWith(Collections.reverseOrder<Sneaker>())
-            else -> {
-            }
-        }
-
-        return newElement
-    }
-
     private fun updateRecycleView(searchRequest: String) {
-        newElements = filterListWithStringParameter(elements, searchRequest)
+        newElements = filtersLogic.filterListWithStringParameter(elements, searchRequest, toggleButtonState)
         adapter?.setNewList(newElements)
     }
 
-    fun filterListWithEmptyString (list: List<Sneaker>) : List<Sneaker> {
-        val newElements = list
-            .stream()
-            .filter { value: Sneaker ->
-                value.gender.equals(gender)
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_PRICE) {
-                    return@filter (SORT_PRICE_FROM <= c.doubleMoney) && (c.doubleMoney <= SORT_PRICE_TO)
-                } else {
-                    return@filter true
-                }
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_SIZE) {
-                    val sizes: List<Size>? = c.size
-                    for (size in sizes!!) {
-                        if (size.size.equals(SORT_SIZE)) {
-                            return@filter true
-                        }
-                    }
-                    return@filter false
-                } else {
-                    return@filter true
-                }
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_SHOP) {
-                    return@filter SORT_SHOP == c.shop?.title
-                } else {
-                    return@filter true
-                }
-            }
-            .filter { c: Sneaker ->
-                if (IS_SORT_BRAND) {
-                    if (c.brand != null) return@filter SORT_BRAND == c.brand
-                        ?.name else return@filter false
-                } else {
-                    return@filter true
-                }
-            }
-            .collect(Collectors.toList())
-        when (toggleButtonState) {
-            0 ->                 //desc sort
-                (newElements as MutableList<Sneaker>).sort()
-            1 ->                 //asc sort
-                (newElements as MutableList<Sneaker>).sortWith(Collections.reverseOrder<Sneaker>())
-            else -> {
-            }
-        }
-
-        return newElements
-    }
-
     private fun updateRecycleView() {
-        newElements = filterListWithEmptyString(elements)
+        newElements = filtersLogic.filterListWithEmptyString(elements, toggleButtonState)
         adapter?.setNewList(newElements)
     }
 
