@@ -216,8 +216,4 @@ class SneakerItemFragment(var sneaker_id: Int) : Fragment() {
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
 }
