@@ -1,13 +1,18 @@
 package com.spbstu.sneakerhunterkotlin
 
+import android.util.Patterns
+import android.webkit.URLUtil
 import com.spbstu.sneakerhunterkotlin.fragments.SearchFragment
 import com.spbstu.sneakerhunterkotlin.server_list.Size
 import com.spbstu.sneakerhunterkotlin.server_list.Sneaker
+import java.net.URL
 import java.util.*
 import java.util.stream.Collectors
 
 class FiltersLogic(private val gender: String) {
-    fun filterListWithStringParameter (list: List<Sneaker>, searchRequest: String, toggleButtonState: Int) : List<Sneaker> {
+    private val WebUrl = Regex("^((ftp|http|https):\\/\\/)[a-zA-Z0-9_-]+(\\.[a-zA-Z]+)+((\\/)[\\w#]+)*(\\/\\w+\\?[a-zA-Z0-9_]+=\\w+(&[a-zA-Z0-9_]+=\\w+)*)?$")
+
+    fun filterListWithStringParameter(list: List<Sneaker>, searchRequest: String, toggleButtonState: Int) : List<Sneaker> {
         val newElement = list
             .stream()
             .filter { value: Sneaker ->
@@ -62,7 +67,7 @@ class FiltersLogic(private val gender: String) {
         }
     }
 
-    fun filterListWithEmptyString (list: List<Sneaker>, toggleButtonState: Int) : List<Sneaker> {
+    fun filterListWithEmptyString(list: List<Sneaker>, toggleButtonState: Int) : List<Sneaker> {
         var newElements = list
             .stream()
             .filter { value: Sneaker ->
@@ -107,12 +112,26 @@ class FiltersLogic(private val gender: String) {
             .toMutableList()
 
         return when (toggleButtonState) {
-            0 ->                 //desc sort
-                newElements.sorted()
-            1 ->                 //asc sort
-                newElements.sortedDescending()
+            0 ->                 //asc sort
+                getAllValidElements(newElements).sorted()
+            1 ->                 //desc sort
+                getAllValidElements(newElements).sortedDescending()
             else ->
-                newElements
+                emptyList()
         }
     }
+
+    private fun getAllValidElements(list: List<Sneaker>): List<Sneaker> =
+            list.asSequence()
+                    .filter { it.shop?.title != null }
+                    .filter { it.shop?.title == "Ali Express" || it.shop?.title == "Asos" }
+                    .filter { it.doubleMoney > 0.0 }
+                    .filter { it.gender == "Men" || it.gender == "Women" }
+                    .filter {
+                        if (it.name != null) {
+                            it.name!!.isNotEmpty()
+                        } else false
+                    }
+                    .toList()
+
 }
