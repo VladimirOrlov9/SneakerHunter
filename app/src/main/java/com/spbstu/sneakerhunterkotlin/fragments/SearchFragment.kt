@@ -65,7 +65,13 @@ open class SearchFragment internal constructor(private val gender: String) : Fra
             ) {
                 if (response.isSuccessful) {
                     elements = response.body() as List<Sneaker>
-                    updateRecycleView()
+                    val editTextSearch = view?.findViewById(R.id.query_edit_text) as EditText
+                    val text = editTextSearch.text.toString()
+                    if (text == "") {
+                        updateRecycleView()
+                    } else {
+                        updateRecycleView(text)
+                    }
                 }
             }
 

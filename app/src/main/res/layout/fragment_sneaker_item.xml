@@ -35,7 +35,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="350dp"
                 android:id="@+id/sneaker_image_view"
                 android:scaleType="centerCrop"/>
 
