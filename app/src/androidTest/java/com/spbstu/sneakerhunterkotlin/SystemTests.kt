@@ -49,10 +49,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 @RunWith(AndroidJUnit4::class)
-class SystemTests {
+class SystemTest1 {
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity> =
-        ActivityScenarioRule(MainActivity::class.java)
+            ActivityScenarioRule(MainActivity::class.java)
 
     @Before
     fun setUp() {
@@ -64,22 +64,21 @@ class SystemTests {
         Intents.release()
     }
 
-
     private fun selectTabAtPosition(tabIndex: Int): ViewAction {
         return object : ViewAction {
             override fun getDescription() = "with tab at index $tabIndex"
 
             override fun getConstraints() = allOf(
-                isDisplayed(),
-                isAssignableFrom(TabLayout::class.java)
+                    isDisplayed(),
+                    isAssignableFrom(TabLayout::class.java)
             )
 
             override fun perform(uiController: UiController, view: View) {
                 val tabLayout = view as TabLayout
                 val tabAtIndex: TabLayout.Tab = tabLayout.getTabAt(tabIndex)
-                    ?: throw PerformException.Builder()
-                        .withCause(Throwable("No tab at index $tabIndex"))
-                        .build()
+                        ?: throw PerformException.Builder()
+                                .withCause(Throwable("No tab at index $tabIndex"))
+                                .build()
 
                 tabAtIndex.select()
             }
@@ -92,79 +91,117 @@ class SystemTests {
         var text = ""
 
         onView(withId(R.id.imageButtonMale))
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.search_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                    0,
-                    object : ViewAction {
-                        override fun getConstraints(): Matcher<View> {
-                            return isAssignableFrom(TextView::class.java)
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                                0,
+                                object : ViewAction {
+                                    override fun getConstraints(): Matcher<View> {
+                                        return isAssignableFrom(TextView::class.java)
+                                    }
 
-                        override fun getDescription(): String {
-                            return "getting text from a TextView"
-                        }
+                                    override fun getDescription(): String {
+                                        return "getting text from a TextView"
+                                    }
 
-                        override fun perform(uiController: UiController?, view: View?) {
-                            val thisView = view as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
-                            text = textView.text.toString()
+                                    override fun perform(uiController: UiController?, view: View?) {
+                                        val thisView = view as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
+                                        text = textView.text.toString()
 
-                            click().perform(uiController, view)
-                        }
-                    }
+                                        click().perform(uiController, view)
+                                    }
+                                }
 
+                        )
                 )
-            )
 
         onView(withId(R.id.tabs))
-            .perform(selectTabAtPosition(1)).toString()
+                .perform(selectTabAtPosition(1)).toString()
 
         Thread.sleep(500)
 
         onView(withId(R.id.history_button))
-            .perform(click())
+                .perform(click())
 
 
         onView(withId(R.id.history_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
-                        }
-                    },
-                    scrollTo()
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                scrollTo()
+                        )
                 )
-            )
 
         onView(withId(R.id.history_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
-                        }
-                    },
-                    click()
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                click()
+                        )
                 )
+    }
+
+}
+@RunWith(AndroidJUnit4::class)
+class SystemTest2 {
+    @get:Rule
+    var activityRule: ActivityScenarioRule<MainActivity> =
+            ActivityScenarioRule(MainActivity::class.java)
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
+
+    private fun selectTabAtPosition(tabIndex: Int): ViewAction {
+        return object : ViewAction {
+            override fun getDescription() = "with tab at index $tabIndex"
+
+            override fun getConstraints() = allOf(
+                    isDisplayed(),
+                    isAssignableFrom(TabLayout::class.java)
             )
+
+            override fun perform(uiController: UiController, view: View) {
+                val tabLayout = view as TabLayout
+                val tabAtIndex: TabLayout.Tab = tabLayout.getTabAt(tabIndex)
+                        ?: throw PerformException.Builder()
+                                .withCause(Throwable("No tab at index $tabIndex"))
+                                .build()
+
+                tabAtIndex.select()
+            }
+        }
     }
 
     @Test
@@ -173,78 +210,129 @@ class SystemTests {
         var text = ""
 
         onView(withId(R.id.imageButtonFemale))
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.search_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                    0,
-                    object : ViewAction {
-                        override fun getConstraints(): Matcher<View> {
-                            return isAssignableFrom(TextView::class.java)
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                                0,
+                                object : ViewAction {
+                                    override fun getConstraints(): Matcher<View> {
+                                        return isAssignableFrom(TextView::class.java)
+                                    }
 
-                        override fun getDescription(): String {
-                            return "getting text from a TextView"
-                        }
+                                    override fun getDescription(): String {
+                                        return "getting text from a TextView"
+                                    }
 
-                        override fun perform(uiController: UiController?, view: View?) {
-                            val thisView = view as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
-                            text = textView.text.toString()
+                                    override fun perform(uiController: UiController?, view: View?) {
+                                        val thisView = view as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
+                                        text = textView.text.toString()
 
-                            click().perform(uiController, view)
-                        }
-                    }
+                                        click().perform(uiController, view)
+                                    }
+                                }
 
+                        )
                 )
-            )
 
         onView(withId(R.id.tabs))
-            .perform(selectTabAtPosition(1)).toString()
+                .perform(selectTabAtPosition(1)).toString()
 
         Thread.sleep(500)
 
         onView(withId(R.id.history_button))
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.history_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
-                        }
-                    },
-                    scrollTo()
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                scrollTo()
+                        )
                 )
-            )
 
         onView(withId(R.id.history_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
-                        }
-                    },
-                    click()
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                click()
+                        )
                 )
+    }
+
+}
+@RunWith(AndroidJUnit4::class)
+class SystemTest3 {
+    @get:Rule
+    var activityRule: ActivityScenarioRule<MainActivity> =
+            ActivityScenarioRule(MainActivity::class.java)
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
+
+    private fun selectTabAtPosition(tabIndex: Int): ViewAction {
+        return object : ViewAction {
+            override fun getDescription() = "with tab at index $tabIndex"
+
+            override fun getConstraints() = allOf(
+                    isDisplayed(),
+                    isAssignableFrom(TabLayout::class.java)
             )
+
+            override fun perform(uiController: UiController, view: View) {
+                val tabLayout = view as TabLayout
+                val tabAtIndex: TabLayout.Tab = tabLayout.getTabAt(tabIndex)
+                        ?: throw PerformException.Builder()
+                                .withCause(Throwable("No tab at index $tabIndex"))
+                                .build()
+
+                tabAtIndex.select()
+            }
+        }
+    }
+
+    private fun withDrawable(@DrawableRes id: Int) = object : TypeSafeMatcher<View>() {
+        override fun describeTo(description: Description) {
+            description.appendText("ImageView with drawable same as drawable with id $id")
+        }
+
+        override fun matchesSafely(view: View): Boolean {
+            val context = view.context
+            val expectedBitmap = context.getDrawable(id)?.toBitmap()
+
+            return view is ImageView && view.drawable.toBitmap().sameAs(expectedBitmap)
+        }
     }
 
     @Test
@@ -253,82 +341,82 @@ class SystemTests {
         var text = ""
 
         onView(withId(R.id.imageButtonMale))
-            .perform(click())
+                .perform(click())
         onView(withId(R.id.query_edit_text))
-            .perform(typeText("nike"), closeSoftKeyboard(), pressKey(KeyEvent.KEYCODE_ENTER))
+                .perform(typeText("nike"), closeSoftKeyboard(), pressKey(KeyEvent.KEYCODE_ENTER))
 
         Thread.sleep(500)
         onView(withId(R.id.search_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                    0,
-                    object : ViewAction {
-                        override fun getConstraints(): Matcher<View> {
-                            return isAssignableFrom(TextView::class.java)
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                                0,
+                                object : ViewAction {
+                                    override fun getConstraints(): Matcher<View> {
+                                        return isAssignableFrom(TextView::class.java)
+                                    }
 
-                        override fun getDescription(): String {
-                            return "getting text from a TextView"
-                        }
+                                    override fun getDescription(): String {
+                                        return "getting text from a TextView"
+                                    }
 
-                        override fun perform(uiController: UiController?, view: View?) {
-                            val thisView = view as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
-                            text = textView.text.toString()
+                                    override fun perform(uiController: UiController?, view: View?) {
+                                        val thisView = view as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
+                                        text = textView.text.toString()
 
-                            click().perform(uiController, view)
-                        }
-                    }
+                                        click().perform(uiController, view)
+                                    }
+                                }
 
+                        )
                 )
-            )
 
         onView(withId(R.id.add_to_favorites_button)).perform(click())
 
         onView(withId(R.id.tabs))
-            .perform(selectTabAtPosition(1)).toString()
+                .perform(selectTabAtPosition(1)).toString()
         Thread.sleep(500)
 
         onView(withId(R.id.favorites_button))
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.search_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
-                        }
-                    },
-                    scrollTo()
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                scrollTo()
+                        )
                 )
-            )
 
         onView(withId(R.id.search_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                .perform(
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
-                        }
-                    },
-                    click()
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                click()
+                        )
                 )
-            )
 
         Thread.sleep(500)
         onView(allOf(withId(R.id.add_to_favorites_button), isDisplayed()))
@@ -343,19 +431,56 @@ class SystemTests {
         Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .check(matches(not(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                        object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                            override fun describeTo(description: Description?) {
+                                description?.appendText("find child with some text")
+                            }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                            override fun matchesSafely(item: CardView?): Boolean {
+                                val thisView = item as CardView
+                                val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
+                                return textView.text.toString() == text
+                            }
                         }
-                    }
                 )))
+    }
+}
+@RunWith(AndroidJUnit4::class)
+class SystemTest4 {
+    @get:Rule
+    var activityRule: ActivityScenarioRule<MainActivity> =
+            ActivityScenarioRule(MainActivity::class.java)
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
+
+    private fun selectTabAtPosition(tabIndex: Int): ViewAction {
+        return object : ViewAction {
+            override fun getDescription() = "with tab at index $tabIndex"
+
+            override fun getConstraints() = allOf(
+                    isDisplayed(),
+                    isAssignableFrom(TabLayout::class.java)
+            )
+
+            override fun perform(uiController: UiController, view: View) {
+                val tabLayout = view as TabLayout
+                val tabAtIndex: TabLayout.Tab = tabLayout.getTabAt(tabIndex)
+                        ?: throw PerformException.Builder()
+                                .withCause(Throwable("No tab at index $tabIndex"))
+                                .build()
+
+                tabAtIndex.select()
+            }
+        }
     }
 
     @Test
@@ -371,28 +496,28 @@ class SystemTests {
         Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .perform(
-                    RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                        0,
-                        object : ViewAction {
-                            override fun getConstraints(): Matcher<View> {
-                                return isAssignableFrom(TextView::class.java)
-                            }
+                        RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                                0,
+                                object : ViewAction {
+                                    override fun getConstraints(): Matcher<View> {
+                                        return isAssignableFrom(TextView::class.java)
+                                    }
 
-                            override fun getDescription(): String {
-                                return "getting text from a TextView"
-                            }
+                                    override fun getDescription(): String {
+                                        return "getting text from a TextView"
+                                    }
 
-                            override fun perform(uiController: UiController?, view: View?) {
-                                val thisView = view as CardView
-                                val textView =
-                                    thisView.findViewById(R.id.element_name) as TextView
-                                text = textView.text.toString()
+                                    override fun perform(uiController: UiController?, view: View?) {
+                                        val thisView = view as CardView
+                                        val textView =
+                                                thisView.findViewById(R.id.element_name) as TextView
+                                        text = textView.text.toString()
 
-                                click().perform(uiController, view)
-                            }
-                        }
+                                        click().perform(uiController, view)
+                                    }
+                                }
 
-                    )
+                        )
                 )
 
         onView(withId(R.id.add_to_favorites_button)).perform(click())
@@ -406,42 +531,42 @@ class SystemTests {
 
         onView(withId(R.id.search_recycler))
                 .perform(
-                    RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                        object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                            override fun describeTo(description: Description?) {
-                                description?.appendText("find child with some text")
-                            }
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                            override fun matchesSafely(item: CardView?): Boolean {
-                                val thisView = item as CardView
-                                val textView =
-                                    thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView =
+                                                thisView.findViewById(R.id.element_name) as TextView
 
-                                return textView.text.toString() == text
-                            }
-                        },
-                        scrollTo()
-                    )
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                scrollTo()
+                        )
                 )
 
         onView(withId(R.id.search_recycler))
                 .perform(
-                    RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                        object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                            override fun describeTo(description: Description?) {
-                                description?.appendText("find child with some text")
-                            }
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                            override fun matchesSafely(item: CardView?): Boolean {
-                                val thisView = item as CardView
-                                val textView =
-                                    thisView.findViewById(R.id.element_name) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView =
+                                                thisView.findViewById(R.id.element_name) as TextView
 
-                                return textView.text.toString() == text
-                            }
-                        },
-                        click()
-                    )
+                                        return textView.text.toString() == text
+                                    }
+                                },
+                                click()
+                        )
                 )
 
         Thread.sleep(500)
@@ -457,18 +582,18 @@ class SystemTests {
         Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .check(matches(not(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
+                        object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                            override fun describeTo(description: Description?) {
+                                description?.appendText("find child with some text")
+                            }
 
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
+                            override fun matchesSafely(item: CardView?): Boolean {
+                                val thisView = item as CardView
+                                val textView = thisView.findViewById(R.id.element_name) as TextView
 
-                            return textView.text.toString() == text
+                                return textView.text.toString() == text
+                            }
                         }
-                    }
                 )))
     }
 
@@ -483,6 +608,22 @@ class SystemTests {
 
             return view is ImageView && view.drawable.toBitmap().sameAs(expectedBitmap)
         }
+    }
+}
+@RunWith(AndroidJUnit4::class)
+class SystemTest5 {
+    @get:Rule
+    var activityRule: ActivityScenarioRule<MainActivity> =
+            ActivityScenarioRule(MainActivity::class.java)
+
+    @Before
+    fun setUp() {
+        Intents.init()
+    }
+
+    @After
+    fun tearDown() {
+        Intents.release()
     }
 
     private lateinit var retrofit: Retrofit
@@ -503,8 +644,8 @@ class SystemTests {
         val sneakerCall: Call<Sneaker?>? = sneakersAPI.getSneakerById(sneaker_id)
         sneakerCall?.enqueue(object : Callback<Sneaker?> {
             override fun onResponse(
-                call: Call<Sneaker?>,
-                response: Response<Sneaker?>
+                    call: Call<Sneaker?>,
+                    response: Response<Sneaker?>
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { sneaker = it }
@@ -512,8 +653,8 @@ class SystemTests {
             }
 
             override fun onFailure(
-                call: Call<Sneaker?>,
-                t: Throwable
+                    call: Call<Sneaker?>,
+                    t: Throwable
             ) {
                 println("fail: $t")
             }
@@ -530,9 +671,9 @@ class SystemTests {
         Thread.sleep(500)
         onView(withId(R.id.query_edit_text))
                 .perform(
-                    typeText(sneaker.name?.take(9)),
-                    closeSoftKeyboard(),
-                    pressKey(KeyEvent.KEYCODE_ENTER)
+                        typeText(sneaker.name?.take(9)),
+                        closeSoftKeyboard(),
+                        pressKey(KeyEvent.KEYCODE_ENTER)
                 )
 
         onView(withId(R.id.filter_button))
@@ -543,136 +684,217 @@ class SystemTests {
         onView(withId(R.id.priceToEditText))
                 .perform(typeText((sneaker.doubleMoney + 1.0).toString()), closeSoftKeyboard())
         onView(withId(R.id.confirm_button))
-            .perform(click())
+                .perform(click())
 
         Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .perform(
-                    RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                        object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                            override fun describeTo(description: Description?) {
-                                description?.appendText("find child with some text")
-                            }
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                            override fun matchesSafely(item: CardView?): Boolean {
-                                val thisView = item as CardView
-                                val textView =
-                                    thisView.findViewById(R.id.element_name) as TextView
-                                val priceTextView =
-                                    thisView.findViewById(R.id.element_price) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView =
+                                                thisView.findViewById(R.id.element_name) as TextView
+                                        val priceTextView =
+                                                thisView.findViewById(R.id.element_price) as TextView
 
-                                return textView.text == sneaker.name && priceTextView.text == sneaker.money
-                            }
-                        },
-                        scrollTo()
-                    )
+                                        return textView.text == sneaker.name && priceTextView.text == sneaker.money
+                                    }
+                                },
+                                scrollTo()
+                        )
                 )
 
         Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .perform(
-                    RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                        object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                            override fun describeTo(description: Description?) {
-                                description?.appendText("find child with some text")
-                            }
+                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+                                    override fun describeTo(description: Description?) {
+                                        description?.appendText("find child with some text")
+                                    }
 
-                            override fun matchesSafely(item: CardView?): Boolean {
-                                val thisView = item as CardView
-                                val textView =
-                                    thisView.findViewById(R.id.element_name) as TextView
-                                val priceTextView =
-                                    thisView.findViewById(R.id.element_price) as TextView
+                                    override fun matchesSafely(item: CardView?): Boolean {
+                                        val thisView = item as CardView
+                                        val textView =
+                                                thisView.findViewById(R.id.element_name) as TextView
+                                        val priceTextView =
+                                                thisView.findViewById(R.id.element_price) as TextView
 
-                                return textView.text == sneaker.name && priceTextView.text == sneaker.money
-                            }
-                        },
-                        click()
-                    )
+                                        return textView.text == sneaker.name && priceTextView.text == sneaker.money
+                                    }
+                                },
+                                click()
+                        )
                 )
 
         val expectedIntent = allOf(hasAction(Intent.ACTION_VIEW), hasData(sneaker.uri))
         intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
         onView(withId(R.id.sneaker_snopurl_button))
-            .perform(click())
+                .perform(click())
         intended(expectedIntent)
     }
 
-    @Test
-    fun checkFemaleSearchByNameAndPriceWorking() {
-        getSneakerItemFromServer(73)
+}
 
-        onView(withId(R.id.imageButtonFemale))
-            .perform(click())
+//@RunWith(AndroidJUnit4::class)
+//class SystemTest6 {
+//    @get:Rule
+//    var activityRule: ActivityScenarioRule<MainActivity> =
+//            ActivityScenarioRule(MainActivity::class.java)
+//
+//    @Before
+//    fun setUp() {
+//        Intents.init()
+//    }
+//
+//    @After
+//    fun tearDown() {
+//        Intents.release()
+//    }
+//
+//    private lateinit var retrofit: Retrofit
+//    private val client: Retrofit
+//        get() {
+//            retrofit = Retrofit.Builder()
+//                    .baseUrl(SneakersAPI.URL)
+//                    .addConverterFactory(GsonConverterFactory.create())
+//                    .build()
+//            return retrofit
+//        }
+//
+//    lateinit var sneaker: Sneaker
+//
+//    private fun getSneakerItemFromServer(sneaker_id: Int) {
+//        val sneakersAPI: SneakersAPI = client.create(SneakersAPI::class.java)
+//
+//        val sneakerCall: Call<Sneaker?>? = sneakersAPI.getSneakerById(sneaker_id)
+//        sneakerCall?.enqueue(object : Callback<Sneaker?> {
+//            override fun onResponse(
+//                    call: Call<Sneaker?>,
+//                    response: Response<Sneaker?>
+//            ) {
+//                if (response.isSuccessful) {
+//                    response.body()?.let { sneaker = it }
+//                }
+//            }
+//
+//            override fun onFailure(
+//                    call: Call<Sneaker?>,
+//                    t: Throwable
+//            ) {
+//                println("fail: $t")
+//            }
+//        })
+//    }
+//
+//    @Test
+//    fun checkFemaleSearchByNameAndPriceWorking() {
+//        getSneakerItemFromServer(73)
+//
+//        onView(withId(R.id.imageButtonFemale))
+//                .perform(click())
+//
+//        Thread.sleep(500)
+//        onView(withId(R.id.query_edit_text))
+//                .perform(
+//                        typeText(sneaker.name?.take(9)),
+//                        closeSoftKeyboard(),
+//                        pressKey(KeyEvent.KEYCODE_ENTER)
+//                )
+//
+//        onView(withId(R.id.filter_button))
+//                .perform(click())
+//
+//        onView(withId(R.id.priceFromEditText))
+//                .perform(typeText((sneaker.doubleMoney - 1.0).toString()), closeSoftKeyboard())
+//        onView(withId(R.id.priceToEditText))
+//                .perform(typeText((sneaker.doubleMoney + 1.0).toString()), closeSoftKeyboard())
+//        onView(withId(R.id.confirm_button))
+//                .perform(click())
+//
+//        Thread.sleep(500)
+//        onView(withId(R.id.search_recycler))
+//                .perform(
+//                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+//                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+//                                    override fun describeTo(description: Description?) {
+//                                        description?.appendText("find child with some text")
+//                                    }
+//
+//                                    override fun matchesSafely(item: CardView?): Boolean {
+//                                        val thisView = item as CardView
+//                                        val textView = thisView.findViewById(R.id.element_name) as TextView
+//                                        val priceTextView =
+//                                                thisView.findViewById(R.id.element_price) as TextView
+//
+//                                        return textView.text == sneaker.name && priceTextView.text == sneaker.money
+//                                    }
+//                                },
+//                                scrollTo()
+//                        )
+//                )
+//
+//        Thread.sleep(500)
+//        onView(withId(R.id.search_recycler))
+//                .perform(
+//                        RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
+//                                object : BoundedMatcher<View, CardView>(CardView::class.java) {
+//                                    override fun describeTo(description: Description?) {
+//                                        description?.appendText("find child with some text")
+//                                    }
+//
+//                                    override fun matchesSafely(item: CardView?): Boolean {
+//                                        val thisView = item as CardView
+//                                        val textView = thisView.findViewById(R.id.element_name) as TextView
+//                                        val priceTextView =
+//                                                thisView.findViewById(R.id.element_price) as TextView
+//
+//                                        return textView.text == sneaker.name && priceTextView.text == sneaker.money
+//                                    }
+//                                },
+//                                click()
+//                        )
+//                )
+//
+//        val expectedIntent = allOf(hasAction(Intent.ACTION_VIEW), hasData(sneaker.uri))
+//        intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+//        onView(withId(R.id.sneaker_snopurl_button))
+//                .perform(click())
+//        intended(expectedIntent)
+//    }
+//}
 
-        Thread.sleep(500)
-        onView(withId(R.id.query_edit_text))
-            .perform(
-                typeText(sneaker.name?.take(9)),
-                closeSoftKeyboard(),
-                pressKey(KeyEvent.KEYCODE_ENTER)
-            )
 
-        onView(withId(R.id.filter_button))
-            .perform(click())
+@RunWith(AndroidJUnit4::class)
+class SystemTest7 {
+    @get:Rule
+    var activityRule: ActivityScenarioRule<MainActivity> =
+        ActivityScenarioRule(MainActivity::class.java)
 
-        onView(withId(R.id.priceFromEditText))
-            .perform(typeText((sneaker.doubleMoney - 1.0).toString()), closeSoftKeyboard())
-        onView(withId(R.id.priceToEditText))
-            .perform(typeText((sneaker.doubleMoney + 1.0).toString()), closeSoftKeyboard())
-        onView(withId(R.id.confirm_button))
-            .perform(click())
-
-        Thread.sleep(500)
-        onView(withId(R.id.search_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
-
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
-                            val priceTextView =
-                                thisView.findViewById(R.id.element_price) as TextView
-
-                            return textView.text == sneaker.name && priceTextView.text == sneaker.money
-                        }
-                    },
-                    scrollTo()
-                )
-            )
-
-        Thread.sleep(500)
-        onView(withId(R.id.search_recycler))
-            .perform(
-                RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    object : BoundedMatcher<View, CardView>(CardView::class.java) {
-                        override fun describeTo(description: Description?) {
-                            description?.appendText("find child with some text")
-                        }
-
-                        override fun matchesSafely(item: CardView?): Boolean {
-                            val thisView = item as CardView
-                            val textView = thisView.findViewById(R.id.element_name) as TextView
-                            val priceTextView =
-                                thisView.findViewById(R.id.element_price) as TextView
-
-                            return textView.text == sneaker.name && priceTextView.text == sneaker.money
-                        }
-                    },
-                    click()
-                )
-            )
-
-        val expectedIntent = allOf(hasAction(Intent.ACTION_VIEW), hasData(sneaker.uri))
-        intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
-        onView(withId(R.id.sneaker_snopurl_button))
-            .perform(click())
-        intended(expectedIntent)
+    @Before
+    fun setUp() {
+        Intents.init()
     }
+
+    @After
+    fun tearDown() {
+        Intents.release()
+    }
+
+    private lateinit var retrofit: Retrofit
+    private val client: Retrofit
+        get() {
+            retrofit = Retrofit.Builder()
+                    .baseUrl(SneakersAPI.URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            return retrofit
+        }
 
 
     lateinit var elements: MutableList<Sneaker>
