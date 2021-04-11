@@ -200,6 +200,15 @@ open class SearchFragment internal constructor(private val gender: String) : Fra
         adapter?.setNewList(newElements)
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        IS_SORT_PRICE = false
+        IS_SORT_SIZE = false
+        IS_SORT_SHOP = false
+        IS_SORT_BRAND = false
+    }
+
     companion object {
         var SORT_PRICE_FROM = 0.0
         var SORT_PRICE_TO = 0.0

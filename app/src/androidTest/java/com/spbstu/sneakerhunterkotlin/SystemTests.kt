@@ -4,12 +4,12 @@ import android.app.Instrumentation
 import android.content.Intent
 import android.view.KeyEvent
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
@@ -691,12 +691,15 @@ class SystemTest6 {
 
     @Test
     fun checkFemaleSearchByNameAndPriceWorking() {
-        getSneakerItemFromServer(73)
+
+        Thread.sleep(3000)
 
         onView(withId(R.id.imageButtonFemale))
                 .perform(click())
 
         Thread.sleep(500)
+        getSneakerItemFromServer(73)
+        Thread.sleep(1500)
         onView(withId(R.id.query_edit_text))
                 .perform(
                         typeText(sneaker.name?.take(9)),
@@ -824,7 +827,7 @@ class SystemTest7 {
         onView(withId(R.id.imageButtonMale))
             .perform(click())
 
-        Thread.sleep(500)
+        Thread.sleep(1500)
         onView(withId(R.id.filter_button))
             .perform(click())
 
@@ -917,7 +920,7 @@ class SystemTest8 {
         onView(withId(R.id.imageButtonMale))
                 .perform(click())
 
-        Thread.sleep(500)
+        Thread.sleep(1500)
         onView(withId(R.id.filter_button))
                 .perform(click())
 
@@ -1001,7 +1004,7 @@ class SystemTest9 {
                                           priceLowerCase: Double): List<Sneaker> {
         return elements.filter { it.brand?.name.equals(brand) }
                 .filter { it.shop?.title.equals(shop) }
-                .filter { it.doubleMoney > priceLowerCase }
+                .filter { it.doubleMoney >= priceLowerCase }
     }
 
     @Test
