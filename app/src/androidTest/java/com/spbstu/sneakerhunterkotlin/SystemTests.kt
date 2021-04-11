@@ -93,6 +93,7 @@ class SystemTest1 {
         onView(withId(R.id.imageButtonMale))
                 .perform(click())
 
+        Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .perform(
                         RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -127,6 +128,7 @@ class SystemTest1 {
                 .perform(click())
 
 
+        Thread.sleep(500)
         onView(withId(R.id.history_recycler))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
@@ -212,6 +214,7 @@ class SystemTest2 {
         onView(withId(R.id.imageButtonFemale))
                 .perform(click())
 
+        Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .perform(
                         RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
@@ -245,6 +248,7 @@ class SystemTest2 {
         onView(withId(R.id.history_button))
                 .perform(click())
 
+        Thread.sleep(500)
         onView(withId(R.id.history_recycler))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
@@ -342,6 +346,8 @@ class SystemTest3 {
 
         onView(withId(R.id.imageButtonMale))
                 .perform(click())
+
+        Thread.sleep(500)
         onView(withId(R.id.query_edit_text))
                 .perform(typeText("nike"), closeSoftKeyboard(), pressKey(KeyEvent.KEYCODE_ENTER))
 
@@ -380,6 +386,7 @@ class SystemTest3 {
         onView(withId(R.id.favorites_button))
                 .perform(click())
 
+        Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
@@ -529,6 +536,7 @@ class SystemTest4 {
         onView(withId(R.id.favorites_button))
                 .perform(click())
 
+        Thread.sleep(500)
         onView(withId(R.id.search_recycler))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
@@ -732,8 +740,12 @@ class SystemTest5 {
                         )
                 )
 
+        Thread.sleep(500)
+
         val expectedIntent = allOf(hasAction(Intent.ACTION_VIEW), hasData(sneaker.uri))
         intending(expectedIntent).respondWith(Instrumentation.ActivityResult(0, null))
+        onView(withId(R.id.scroll_view_sneaker))
+                .perform(swipeUp())
         onView(withId(R.id.sneaker_snopurl_button))
                 .perform(click())
         intended(expectedIntent)
@@ -936,6 +948,7 @@ class SystemTest7 {
         onView(withId(R.id.imageButtonMale))
             .perform(click())
 
+        Thread.sleep(500)
         onView(withId(R.id.filter_button))
             .perform(click())
 
