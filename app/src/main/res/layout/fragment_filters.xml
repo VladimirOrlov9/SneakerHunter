@@ -49,7 +49,7 @@
                 android:inputType="number|none"
                 android:maxLength="6"
                 android:id="@+id/priceFromEditText"
-                android:digits="0123456789"
+                android:digits="0123456789."
                 android:hint="@string/from_string"/>
 
             <EditText
@@ -59,7 +59,7 @@
                 android:inputType="number|none"
                 android:maxLength="6"
                 android:id="@+id/priceToEditText"
-                android:digits="0123456789"
+                android:digits="0123456789."
                 android:hint="@string/to_string"/>
         </LinearLayout>
 

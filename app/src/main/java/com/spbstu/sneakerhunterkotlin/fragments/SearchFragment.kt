@@ -65,7 +65,13 @@ open class SearchFragment internal constructor(private val gender: String) : Fra
             ) {
                 if (response.isSuccessful) {
                     elements = response.body() as List<Sneaker>
-                    updateRecycleView()
+                    val editTextSearch = view?.findViewById(R.id.query_edit_text) as EditText
+                    val text = editTextSearch.text.toString()
+                    if (text == "") {
+                        updateRecycleView()
+                    } else {
+                        updateRecycleView(text)
+                    }
                 }
             }
 
@@ -192,6 +198,15 @@ open class SearchFragment internal constructor(private val gender: String) : Fra
     private fun updateRecycleView() {
         newElements = filtersLogic.filterListWithEmptyString(elements, toggleButtonState)
         adapter?.setNewList(newElements)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        IS_SORT_PRICE = false
+        IS_SORT_SIZE = false
+        IS_SORT_SHOP = false
+        IS_SORT_BRAND = false
     }
 
     companion object {
