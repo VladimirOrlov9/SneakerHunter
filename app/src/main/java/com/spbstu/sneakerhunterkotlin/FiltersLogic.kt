@@ -21,7 +21,10 @@ class FiltersLogic(private val gender: String) {
             }
             .filter { c: Sneaker ->
                 if (SearchFragment.IS_SORT_PRICE) {
-                    return@filter (SearchFragment.SORT_PRICE_FROM <= c.doubleMoney) && (c.doubleMoney <= SearchFragment.SORT_PRICE_TO)
+                    if (SearchFragment.SORT_PRICE_TO == 0.0)
+                        return@filter (SearchFragment.SORT_PRICE_FROM <= c.doubleMoney)
+                    else
+                        return@filter (SearchFragment.SORT_PRICE_FROM <= c.doubleMoney) && (c.doubleMoney <= SearchFragment.SORT_PRICE_TO)
                 } else {
                     return@filter true
                 }
@@ -75,7 +78,10 @@ class FiltersLogic(private val gender: String) {
             }
             .filter { c: Sneaker ->
                 if (SearchFragment.IS_SORT_PRICE) {
-                    return@filter (SearchFragment.SORT_PRICE_FROM <= c.doubleMoney) && (c.doubleMoney <= SearchFragment.SORT_PRICE_TO)
+                    if (SearchFragment.SORT_PRICE_TO == 0.0)
+                        return@filter (SearchFragment.SORT_PRICE_FROM <= c.doubleMoney)
+                    else
+                        return@filter (SearchFragment.SORT_PRICE_FROM <= c.doubleMoney) && (c.doubleMoney <= SearchFragment.SORT_PRICE_TO)
                 } else {
                     return@filter true
                 }
