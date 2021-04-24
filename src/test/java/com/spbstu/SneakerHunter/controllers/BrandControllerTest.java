@@ -2,10 +2,7 @@ package com.spbstu.SneakerHunter.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spbstu.SneakerHunter.models.BrandModel;
-import com.spbstu.SneakerHunter.models.GoodsModel;
-import com.spbstu.SneakerHunter.models.SizeModel;
 import com.spbstu.SneakerHunter.repos.BrandRepo;
-import com.spbstu.SneakerHunter.repos.SizeRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,15 +10,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,6 +55,14 @@ class BrandControllerTest {
     }
 
     @Test
+    void getNotExistedSize() throws Exception {
+        when(brandRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        mvc.perform(get("/brand/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void create() throws Exception {
         BrandModel brand = new BrandModel( 1L, "Ashan");
         when(brandRepo.save(any())).thenReturn(brand);
@@ -70,15 +74,38 @@ class BrandControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", equalTo(1)))
                 .andExpect(jsonPath("$.name", equalTo("Ashan")));
+        verify(brandRepo, times(1)).save(any(BrandModel.class));
+    }
+
+    @Test
+    void createExisted() throws Exception {
+        BrandModel brand = new BrandModel( 1L, "ashan");
+        //when(sizeRepo.save(any())).thenReturn(size);
+
+        doReturn(new BrandModel()).when(brandRepo).findByName("ashan");
+
+        mvc.perform(post("/brand")
+                .content(asJsonString(brand))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().is(409));
+        verify(brandRepo, times(0)).save(any(BrandModel.class));
     }
 
     @Test
     void deleteTest() throws Exception {
-        BrandModel size = new BrandModel( 1L, "Ashan");
-        when(brandRepo.findById(any())).thenReturn(Optional.of(size));
+        BrandModel brand = new BrandModel( 1L, "Ashan");
+        when(brandRepo.findById(any())).thenReturn(Optional.of(brand));
         mvc.perform(
                 delete("/brand/1"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteNotExistedTest() throws Exception {
+        when(brandRepo.findById(any())).thenReturn(Optional.empty());
+        mvc.perform(
+                delete("/brand/1"))
+                .andExpect(status().isNotFound());
     }
 
     public static String asJsonString(final Object obj) {

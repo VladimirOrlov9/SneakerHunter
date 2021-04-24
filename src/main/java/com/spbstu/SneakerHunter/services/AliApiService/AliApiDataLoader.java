@@ -15,48 +15,52 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-//@Service
+@Service
 //@EnableScheduling
 public class AliApiDataLoader {
     private ShopRepo shopRepo;
     private PictureRepo pictureRepo;
     private GoodsRepo goodsRepo;
+    private RestTemplate template;
     public static final String aliTitle = "Ali Express";
     public static final String aliUrl = "en-aliexpress.com";
+    public static final String API_KEY_ALI = "90d179237emsha25a63905b9d21bp12e8a6jsnf87f038e1521";
+    public static final String API_HOST_ALI = "ali-express1.p.rapidapi.com";
 
     public AliApiDataLoader() {
     }
 
     @Autowired
-    public AliApiDataLoader(ShopRepo shopRepo, PictureRepo pictureRepo, GoodsRepo goodsRepo) {
+    public AliApiDataLoader(ShopRepo shopRepo, PictureRepo pictureRepo, GoodsRepo goodsRepo, RestTemplate template) {
         this.shopRepo = shopRepo;
         this.pictureRepo = pictureRepo;
         this.goodsRepo = goodsRepo;
+        this.template = template;
     }
 
-    public GoodsRepo getGoodsRepo() {
-        return goodsRepo;
-    }
-
-    public void setGoodsRepo(GoodsRepo goodsRepo) {
-        this.goodsRepo = goodsRepo;
-    }
-
-    public ShopRepo getCategoryRepo() {
-        return shopRepo;
-    }
-
-    public void setCategoryRepo(ShopRepo shopRepo) {
-        this.shopRepo = shopRepo;
-    }
-
-    public PictureRepo getPictureRepo() {
-        return pictureRepo;
-    }
-
-    public void setPictureRepo(PictureRepo pictureRepo) {
-        this.pictureRepo = pictureRepo;
-    }
+//    public GoodsRepo getGoodsRepo() {
+//        return goodsRepo;
+//    }
+//
+//    public void setGoodsRepo(GoodsRepo goodsRepo) {
+//        this.goodsRepo = goodsRepo;
+//    }
+//
+//    public ShopRepo getCategoryRepo() {
+//        return shopRepo;
+//    }
+//
+//    public void setCategoryRepo(ShopRepo shopRepo) {
+//        this.shopRepo = shopRepo;
+//    }
+//
+//    public PictureRepo getPictureRepo() {
+//        return pictureRepo;
+//    }
+//
+//    public void setPictureRepo(PictureRepo pictureRepo) {
+//        this.pictureRepo = pictureRepo;
+//    }
 
     public HttpEntity<String> getRapidApiHttpHeader(){
         HttpHeaders headers = new HttpHeaders();
@@ -67,14 +71,15 @@ public class AliApiDataLoader {
         return new HttpEntity<>("body", headers);
     }
 
-    public void getSneakers(Integer offset){
-        RestTemplate template = new RestTemplate();
+    public Product getProductsFromRapid(Integer offset) {
         ResponseEntity<Product> response = template.exchange(
                 "https://ali-express1.p.rapidapi.com/productsByCategory/200005276?from=" + offset + "&country=US"
                 , HttpMethod.GET, getRapidApiHttpHeader(), Product.class);
 
-        Product sneakers = response.getBody();
+        return response.getBody();
+    }
 
+    public void saveSneakers(Product sneakers){
         if (sneakers != null) {
             for(Item item: sneakers.getData().getItems()){
                 List<GoodsModel> goods = fromSneakerToGoods(item);
@@ -83,21 +88,19 @@ public class AliApiDataLoader {
                         goodsRepo.save(good);
                 }
             }
-
         }
-
     }
 
     //@Scheduled(fixedDelay = 1_000_000)
-    public void loadData() {
+    public void loadDataFromRapid() {
 
         for (int offset = 0; offset <= 100; offset += 20)
-            getSneakers(offset);
+            saveSneakers(getProductsFromRapid(offset));
+
     }
 
     public List<GoodsModel> fromSneakerToGoods(Item sneaker){
         List<GoodsModel> goodsList = new LinkedList<>();
-        List<SizeModel> sizes = new LinkedList<>();
 
         String gender = sneaker.getProductElements().getTitle().getTitle();
         String lowerCaseGender = gender.toLowerCase(Locale.ROOT);
@@ -129,12 +132,15 @@ public class AliApiDataLoader {
         }
 
         String price = sneaker.getProductElements().getPrice().getSellPrice().getFormatedAmount();
-        price = price.substring(price.indexOf(" "));
+        try {
+            price = price.substring(price.indexOf(" "));
+        } catch (StringIndexOutOfBoundsException e) {
+        }
+
 
         GoodsModel goods = new GoodsModel(shop, sneaker.getProductElements().getTitle().getTitle(), null, null,
                 picture, price, gender, "https:" + sneaker.getAction());
         goodsList.add(goods);
         return goodsList;
     }
-
 }

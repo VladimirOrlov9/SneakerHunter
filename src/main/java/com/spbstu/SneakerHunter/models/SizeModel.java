@@ -31,7 +31,7 @@ public class SizeModel {
     @JoinTable (name="goods_size",
             joinColumns=@JoinColumn (name="size_id"),
             inverseJoinColumns=@JoinColumn(name="goods_id"))
-    //@JsonBackReference
+
     @Nullable
     private List<GoodsModel> goods;
 
@@ -54,4 +54,13 @@ public class SizeModel {
     public void setSize(String size) {
         this.size = size;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
+

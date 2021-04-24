@@ -1,18 +1,10 @@
 package com.spbstu.SneakerHunter.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spbstu.SneakerHunter.models.GoodsModel;
-import com.spbstu.SneakerHunter.models.PictureModel;
-import com.spbstu.SneakerHunter.models.ShopModel;
-import com.spbstu.SneakerHunter.models.SizeModel;
+import com.spbstu.SneakerHunter.models.*;
 import com.spbstu.SneakerHunter.repos.GoodsRepo;
-import com.spbstu.SneakerHunter.repos.SizeRepo;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,36 +14,26 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration()
 @WebMvcTest(GoodsController.class)
 @EnableWebMvc
 class GoodsControllerTest {
-    @Mock
-    public ShopModel shopMock;
-
-    @Mock
-    public PictureModel pictMock;
 
     @MockBean
     private GoodsRepo goodsRepo;
-
-    @InjectMocks
-    GoodsController goodsController;
 
     @Autowired
     private MockMvc mvc;
@@ -90,6 +72,14 @@ class GoodsControllerTest {
     }
 
     @Test
+    void getNotExistedSize() throws Exception {
+        when(goodsRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        mvc.perform(get("/sneakers/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void create() throws Exception {
         ShopModel shop = new ShopModel(1L, "Asos", "asos.com");
         PictureModel picture = new PictureModel(1L, "asospicture.com");
@@ -107,6 +97,24 @@ class GoodsControllerTest {
     }
 
     @Test
+    void createExisted() throws Exception {
+        ShopModel shop = new ShopModel(1L, "Asos", "asos.com");
+        PictureModel picture = new PictureModel(1L, "asospicture.com");
+        GoodsModel goods = new GoodsModel( 1L, shop, "crosovok", null, null, picture, "1000",
+                "Man", "qwe.com");
+
+        doReturn(new GoodsModel()).when(goodsRepo).findByUri("qwe.com");
+
+        verify(goodsRepo, times(0)).save(any(GoodsModel.class));
+
+        mvc.perform(post("/sneakers")
+                .content(asJsonString(goods))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+
+                .andExpect(status().is(409));
+    }
+
+    @Test
     void deleteTest() throws Exception {
         ShopModel shop = new ShopModel(1L, "Asos", "asos.com");
         PictureModel picture = new PictureModel(1L, "asospicture.com");
@@ -116,6 +124,14 @@ class GoodsControllerTest {
         mvc.perform(
                 delete("/sneakers/1"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteNotExistedTest() throws Exception {
+        when(goodsRepo.findById(any())).thenReturn(Optional.empty());
+        mvc.perform(
+                delete("/sneakers/1"))
+                .andExpect(status().isNotFound());
     }
 
     public static String asJsonString(final Object obj) {

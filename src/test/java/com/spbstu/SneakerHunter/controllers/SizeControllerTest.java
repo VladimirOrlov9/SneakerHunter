@@ -5,40 +5,24 @@ import com.spbstu.SneakerHunter.models.GoodsModel;
 import com.spbstu.SneakerHunter.models.SizeModel;
 import com.spbstu.SneakerHunter.repos.SizeRepo;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @WebMvcTest(SizeController.class)
 class SizeControllerTest {
-    @InjectMocks
-    SizeController sizeController;
 
     @Autowired
     private MockMvc mvc;
@@ -62,12 +46,20 @@ class SizeControllerTest {
     @Test
     void getOne() throws Exception {
         when(sizeRepo.findById(anyLong())).thenReturn(Optional.of(
-                new SizeModel("42")
+                new SizeModel(1L, "42")
         ));
 
-        mvc.perform(get("/size/42"))
+        mvc.perform(get("/size/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size", equalTo("42")));
+    }
+
+    @Test
+    void getNotExistedSize() throws Exception {
+        when(sizeRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        mvc.perform(get("/size/1"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -86,12 +78,36 @@ class SizeControllerTest {
     }
 
     @Test
+    void createExisted() throws Exception {
+        SizeModel size = new SizeModel( 1L, "43");
+        size.setGoods(new ArrayList<GoodsModel>());
+
+        doReturn(new SizeModel()).when(sizeRepo).findBySize("43");
+
+        verify(sizeRepo, times(0)).save(any(SizeModel.class));
+
+        mvc.perform(post("/size")
+                .content(asJsonString(size))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+
+                .andExpect(status().is(409));
+    }
+
+    @Test
     void deleteTest() throws Exception {
         SizeModel size = new SizeModel( 1L, "43");
         when(sizeRepo.findById(any())).thenReturn(Optional.of(size));
         mvc.perform(
                 delete("/size/1"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteNotExistedTest() throws Exception {
+        when(sizeRepo.findById(any())).thenReturn(Optional.empty());
+        mvc.perform(
+                delete("/size/1"))
+                .andExpect(status().isNotFound());
     }
 
 
