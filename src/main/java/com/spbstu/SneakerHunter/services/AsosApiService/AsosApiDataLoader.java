@@ -139,7 +139,7 @@ public class AsosApiDataLoader {
 
     //@Scheduled(fixedDelay = 1_000_000)
     public void loadData() {
-        for (int offset = 0; offset <= 100; offset += 50)
+        for (int offset = 0; offset <= 10; offset += 5)
             saveSneakers(getSneakersFromRapid(offset));
     }
 

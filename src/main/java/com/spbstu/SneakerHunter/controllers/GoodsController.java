@@ -33,6 +33,14 @@ public class GoodsController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(goods.get());
     }
 
+    @GetMapping({"name/{name}"})
+    public ResponseEntity<GoodsModel> getOne(@PathVariable("name") String name){
+        GoodsModel goods = goodsRepo.findByName(name);
+        if (goods == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(goods);
+    }
+
     @PostMapping
     public ResponseEntity<GoodsModel> create(@RequestBody GoodsModel goods){
         GoodsModel goodsFromDB = goodsRepo.findByUri(goods.getUri());
