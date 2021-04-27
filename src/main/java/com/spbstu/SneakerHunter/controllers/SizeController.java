@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.http.MediaType;
 
-import java.awt.*;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @EnableWebMvc
 @RestController
@@ -26,20 +27,29 @@ public class SizeController {
         return sizeRepo.findAll();
     }
 
-    @GetMapping({"{size}"})
-    public SizeModel getOne(@PathVariable("size") SizeModel size){
-        return size;
+    @GetMapping({"{id}"})
+    public ResponseEntity<SizeModel> getOne(@PathVariable("id") Long id) throws EntityNotFoundException{
+        Optional<SizeModel> sizeFromDB = sizeRepo.findById(id);
+        if (sizeFromDB.isEmpty())
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(sizeFromDB.get());
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SizeModel> create(@RequestBody SizeModel size){
-      //  return sizeRepo.save(size);
-        SizeModel p = sizeRepo.save(size);
-        return ResponseEntity.status(201).body(p);
+        SizeModel sizeFromDB = sizeRepo.findBySize(size.getSize());
+        if (sizeFromDB != null)
+            return ResponseEntity.status(409).body(size);
+        SizeModel newSize = sizeRepo.save(size);
+        return ResponseEntity.status(201).body(newSize);
     }
 
     @DeleteMapping({"{id}"})
-    public void delete(@PathVariable("id") SizeModel size){
-        sizeRepo.delete(size);
+    public ResponseEntity<SizeModel> delete(@PathVariable("id") Long id){
+        Optional<SizeModel> sizeFromDB = sizeRepo.findById(id);
+        if (sizeFromDB.isEmpty())
+            return ResponseEntity.notFound().build();
+        sizeRepo.deleteById(id);
+        return ResponseEntity.ok().body(sizeFromDB.get());
     }
 }
