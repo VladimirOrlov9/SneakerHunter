@@ -36,7 +36,6 @@ public class DataLoaderTest {
         assertTrue(sneakers.isEmpty());
         loader.loadData();
         sneakers = goodsRepo.findAll();
-        System.out.println(sneakers);
         assertFalse(sneakers.isEmpty());
     }
 }
