@@ -25,7 +25,7 @@ public class AsosApiDataLoader {
     private RestTemplate template;
     public static final String asosTitle = "Asos";
     public static final String asosUrl = "https://www.asos.com/us/men/";
-    public static final String API_KEY_ASOS = "90d179237emsha25a63905b9d21bp12e8a6jsnf87f038e1521";
+    public static final String API_KEY_ASOS = "377f238863mshfa1e378716964dap15af7ejsn64c2bba7a69e";
     public static final String API_HOST_ASOS = "asos2.p.rapidapi.com";
 
     public AsosApiDataLoader() {
