@@ -161,7 +161,24 @@ public class RestApiTest {
                 mvcResult.getResponse().getContentType());
     }
 
+    @Test
+    public void getNotExistedBrandTest() throws Exception {
+        this.mockMvc.perform(get("/brand/2"))
+                .andExpect(status().isNotFound())
+                .andDo(print())
+                .andReturn();
+    }
 
+    @Test
+    public void postNewBrandTest() throws Exception {
+        BrandModel brand = new BrandModel(2L, "Nike");
+        System.out.println(brand.getId());
 
+        this.mockMvc.perform(post("/brand")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(brand)))
+                .andExpect(status().isCreated())
+                .andDo(print());
+    }
 
 }
